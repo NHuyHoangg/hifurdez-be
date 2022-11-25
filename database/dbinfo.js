@@ -21,9 +21,9 @@ const pool = new mysql.createConnection(process.env.DATABASE_URL);
 // });
 
 
-pool.query("SELECT * FROM `res_users`", function (err, results) {
-  console.log(results);
-});
+// pool.query("SELECT * FROM `res_users`", function (err, results) {
+//   console.log(results);
+// });
 
 module.exports = {
   pool,
