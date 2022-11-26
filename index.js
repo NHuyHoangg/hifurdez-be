@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => {
-  res.send("i love u");
+  res.send("<html> <img src='https://ik.imagekit.io/amnd3xdhd/316166119_526826592671589_9115068966916421847_n.png?ik-sdk-version=javascript-1.4.3&updatedAt=1669486983800' style='width: 100%'></html>");
 });
 
 // test connect
@@ -34,7 +34,7 @@ app.use("/server/auth", require("./controller/AuthController"));
 //product
 
 //
-
 app.listen("3001", () => {
+   
   console.log("server started running on 3001");
 });
