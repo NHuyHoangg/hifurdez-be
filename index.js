@@ -7,39 +7,11 @@ const app = express();
 // const cors = require('cors');
 const cors = require("cors");
 const corsOptions = {
-  origin: [
-    "http://localhost:3000",
-    "https://www.hifurdez.studio/",
-    "https://furniture-showroom-73eccyuar-nhuyhoangg.vercel.app/",
-  ],
+  origin: ["http://localhost:3000", "https://www.hifurdez.studio/"],
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
-
-// app.use(cors());
-// var whitelist = ["localhost:3000", "https://www.hifurdez.studio/"];
-// var corsOptions = {
-//   origin: function (origin, callback) {
-//     if (whitelist.indexOf(origin) !== -1) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error("Not allowed by CORS"));
-//     }
-//   },
-// };
-// app.use(cors(corsOptions));
-
-// app.use((req, res, next) => {
-//   res.setHeader("Access-Control-Allow-Origin", "*");
-//   res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE");
-//   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type, Accept"
-//   );
-//   next();
-// });
 
 const productsCtrl = require("./controller/ProductController");
 dotenv.config();
@@ -49,8 +21,6 @@ app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// app.use(cors());
-// app.use(cors({ origin: "https://www.hifurdez.studio/" }));
 
 app.get("/", (req, res) => {
   res.send(
