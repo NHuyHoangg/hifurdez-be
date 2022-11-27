@@ -14,7 +14,7 @@ module.exports = {
       "     , product_product.discount_price" +
       "     , product_collection.name AS collection_name " +
       "     , product_category.name AS category_name " +
-      "     , media_1.content AS product_image_1 " +
+      "     , REPLACE(media_1.content, 'FFFFFF', 'f0eae2') AS product_image_1 " +
       "     , media_2.content AS product_image_2 " +
       "  FROM product_product " +
       "  LEFT JOIN product_collection " +
@@ -36,11 +36,13 @@ module.exports = {
       "         FROM product_media" +
       "        WHERE product_index = 2 " +
       "            ) AS media_2" +
-      "    ON product_product.id = media_2.product_id;";
+      "    ON product_product.id = media_2.product_id;" ;
+      // " LIMIT 2;";
 
     console.log(sql);
     pool.query(sql, (err, response) => {
       if (err) throw err;
+      
       res.json(response);
     });
   },
