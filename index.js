@@ -7,7 +7,7 @@ const app = express();
 // const cors = require('cors');
 const cors = require("cors");
 const corsOptions = {
-  origin: ["http://localhost:3000", "https://www.hifurdez.studio/"],
+  origin: ["http://localhost:3000", "https://www.hifurdez.studio/",],
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
@@ -29,7 +29,6 @@ app.get("/", (req, res) => {
 });
 
 // test connect
-app.use("/server/test", require("./test"));
 
 //api route
 /**
