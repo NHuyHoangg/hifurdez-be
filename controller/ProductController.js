@@ -1,10 +1,8 @@
 "use strict";
 const express = require("express");
-const router = express.Router();
 const util = require("util");
 const mysql = require("mysql2");
 const { pool } = require("../database/dbinfo");
-const { filterProps } = require("@mantine/core");
 
 module.exports = {
   get: (req, res) => {
