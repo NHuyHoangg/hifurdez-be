@@ -1,7 +1,5 @@
 "use strict";
-const express = require("express");
 const util = require("util");
-const mysql = require("mysql2");
 const { pool } = require("../database/dbinfo");
 
 module.exports = {
@@ -46,8 +44,9 @@ module.exports = {
     });
   },
   detail: (req, res) => {
+    let data = req.body.id;
     let sql = "SELECT * FROM product_product_media WHERE id = ?";
-    pool.query(sql, [req.params.id], (err, response) => {
+    pool.query(sql, [data], (err, response) => {
       if (err) throw err;
       res.json(response);
     });
@@ -55,7 +54,7 @@ module.exports = {
   random: (req, res) => {
     let sql =
       "SELECT id, product_name, price, discount_price, media_0, media_1 " +
-      "from product_product_media ORDER BY RAND() LIMIT 8; "
+      "from product_product_media ORDER BY RAND() LIMIT 8; ";
     pool.query(sql, (err, response) => {
       if (err) throw err;
       res.json(response);

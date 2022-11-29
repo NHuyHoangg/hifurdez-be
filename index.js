@@ -1,11 +1,8 @@
 const express = require("express");
-const dotenv = require("dotenv");
-const { pool } = require("./database/dbinfo");
 const cors = require("cors");
 const productsCtrl = require("./controller/ProductController");
 
 const app = express();
-dotenv.config();
 
 const corsOptions = {
   origin: ["http://localhost:3000", "https://www.hifurdez.studio/"],
@@ -23,20 +20,25 @@ app.get("/", (req, res) => {
   );
 });
 
+
 //api route
-/**
-    Phân route theo từng nhóm
-**/
+
 
 //auth
 app.use("/server/auth", require("./controller/AuthController"));
 
 //product
+
+// random 8 product from db
 app.route("/product").get(productsCtrl.random);
-app.route("/product/:id").get(productsCtrl.detail);
+
+// send form with var name "id" to get detail
+app.route("/product").post(productsCtrl.detail);
+
+// all product from db
 app.route("/products").get(productsCtrl.get);
 
-//
+
 app.listen("3001", () => {
   console.log("server started running on 3001");
 });
