@@ -1,26 +1,18 @@
 const express = require("express");
-const dotenv = require("dotenv");
-const bodyParser = require("body-parser");
-const { pool } = require("./database/dbinfo");
+const cors = require("cors");
+const productsCtrl = require("./controller/ProductController");
+
 const app = express();
 
-// const cors = require('cors');
-const cors = require("cors");
 const corsOptions = {
-  origin: ["http://localhost:3000", "https://www.hifurdez.studio/",],
+  origin: ["http://localhost:3000", "https://www.hifurdez.studio/"],
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
+
 app.use(cors(corsOptions));
-
-const productsCtrl = require("./controller/ProductController");
-dotenv.config();
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
 
 app.get("/", (req, res) => {
   res.send(
@@ -28,23 +20,25 @@ app.get("/", (req, res) => {
   );
 });
 
-// test connect
 
 //api route
-/**
-    Phân route theo từng nhóm
-**/
 
-app.route("/products").get(productsCtrl.get);
-
-// app.route("/products/:productId")
-//     .get(productsCtrl.detail)
 
 //auth
 app.use("/server/auth", require("./controller/AuthController"));
+
 //product
 
-//
+// random 8 product from db
+app.route("/product").get(productsCtrl.random);
+
+// send form with var name "id" to get detail
+app.route("/product").post(productsCtrl.detail);
+
+// all product from db
+app.route("/products").get(productsCtrl.get);
+
+
 app.listen("3001", () => {
   console.log("server started running on 3001");
 });
