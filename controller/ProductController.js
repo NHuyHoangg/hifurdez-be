@@ -36,13 +36,28 @@ module.exports = {
       "         FROM product_media" +
       "        WHERE product_index = 2 " +
       "            ) AS media_2" +
-      "    ON product_product.id = media_2.product_id;" ;
-      // " LIMIT 2;";
+      "    ON product_product.id = media_2.product_id;";
+    // " LIMIT 2;";
 
-    console.log(sql);
     pool.query(sql, (err, response) => {
       if (err) throw err;
-      
+
+      res.json(response);
+    });
+  },
+  detail: (req, res) => {
+    let sql = "SELECT * FROM product_product_media WHERE id = ?";
+    pool.query(sql, [req.params.id], (err, response) => {
+      if (err) throw err;
+      res.json(response);
+    });
+  },
+  random: (req, res) => {
+    let sql =
+      "SELECT id, product_name, price, discount_price, media_0, media_1 " +
+      "from product_product_media ORDER BY RAND() LIMIT 8; "
+    pool.query(sql, (err, response) => {
+      if (err) throw err;
       res.json(response);
     });
   },
