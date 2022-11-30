@@ -1,6 +1,10 @@
 const express = require("express");
 const cors = require("cors");
 const productsCtrl = require("./controller/ProductController");
+const analytic = require("@vercel/analytics")
+
+
+analytic.inject();
 
 const app = express();
 
