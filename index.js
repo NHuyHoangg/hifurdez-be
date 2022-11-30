@@ -1,8 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const productsCtrl = require("./controller/ProductController");
-const analytic = require("@vercel/analytics")
-
+const address = require("./controller/AddressController");
+const analytic = require("@vercel/analytics");
 
 analytic.inject();
 
@@ -42,6 +42,15 @@ app.route("/product-by-id").post(productsCtrl.detail);
 
 // GET ALL PRODUCT
 app.route("/all-product").get(productsCtrl.get);
+
+// GET ALL PROVINCE
+app.route("/province").get(address.province);
+
+// POST ALL DISTRICT WITH PROVINCE_ID WITH PARAMS {id}
+app.route("/province/district").post(address.district);
+
+// POST ALL WARD WITH DISTRICT_ID WITH PARAMS {id}
+app.route("/province/district/ward").post(address.ward);
 
 app.listen("3001", () => {
   console.log("server started running on 3001");
