@@ -20,24 +20,24 @@ app.get("/", (req, res) => {
   );
 });
 
-
-//api route
-
-
-//auth
+// API ROUTE
+// AUTH
 app.use("/server/auth", require("./controller/AuthController"));
 
-//product
+// GET 8 RANDOM PRODUCTS BY COLLECTION
+app.route("/product-random-by-spring").get(productsCtrl.randomBySpring);
+app.route("/product-random-by-summer").get(productsCtrl.randomBySummer);
+app.route("/product-random-by-autumn").get(productsCtrl.randomByAutumn);
+app.route("/product-random-by-winter").get(productsCtrl.randomByWinter);
 
-// random 8 product from db
-app.route("/product").get(productsCtrl.random);
+// GET 8 RANDOM PRODUCTS
+app.route("/product-random").get(productsCtrl.random);
 
-// send form with var name "id" to get detail
-app.route("/product").post(productsCtrl.detail);
+// POST PRODUCT DETAIL WITH PARAMS {id}
+app.route("/product-by-id").post(productsCtrl.detail);
 
-// all product from db
-app.route("/products").get(productsCtrl.get);
-
+// GET ALL PRODUCT
+app.route("/all-product").get(productsCtrl.get);
 
 app.listen("3001", () => {
   console.log("server started running on 3001");

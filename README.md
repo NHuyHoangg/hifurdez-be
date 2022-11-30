@@ -1,10 +1,9 @@
-Chạy cài đặt
+- Chạy cài đặt
 
-    npm i
+  npm i
 
+- Tạo file .env ở database.env thay biến DATABASE_URL='url' với url là đường dẫn tới database.
 
-tạo file .env ở database\.env thay biến DATABASE_URL='url' với url là link tới database
+- Chạy server
 
-run
-
-    npm start
+  npm start
