@@ -2,9 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const productsCtrl = require("./controller/ProductController");
 const address = require("./controller/AddressController");
-const analytic = require("@vercel/analytics");
-
-analytic.inject();
 
 const app = express();
 
@@ -25,33 +22,37 @@ app.get("/", (req, res) => {
 });
 
 // API ROUTE
-// AUTH
+// AUTH - POST
 app.use("/server/auth", require("./controller/AuthController"));
 
-// GET 8 RANDOM PRODUCTS BY COLLECTION
+// COLLECTION - GET - 8 random products by collection.
 app.route("/product-random-by-spring").get(productsCtrl.randomBySpring);
 app.route("/product-random-by-summer").get(productsCtrl.randomBySummer);
 app.route("/product-random-by-autumn").get(productsCtrl.randomByAutumn);
 app.route("/product-random-by-winter").get(productsCtrl.randomByWinter);
 
-// GET 8 RANDOM PRODUCTS
-app.route("/product-random").get(productsCtrl.random);
-
-// POST PRODUCT DETAIL WITH PARAMS {id}
-app.route("/product-by-id").post(productsCtrl.detail);
-
-// GET ALL PRODUCT
+// ALL PRODUCT - GET - all product.
 app.route("/all-product").get(productsCtrl.get);
 
-// GET ALL PROVINCE
+// PRODUCT DETAIL
+// GET - 8 random products
+app.route("/product-random").get(productsCtrl.random);
+
+// POST - product detail with params {id}.
+app.route("/product-by-id").post(productsCtrl.detail);
+
+
+// ADDRESS
+// GET - all province
 app.route("/province").get(address.province);
 
-// POST ALL DISTRICT WITH PROVINCE_ID WITH PARAMS {id}
+// POST - all district with params {province_id}.
 app.route("/province/district").post(address.district);
 
-// POST ALL WARD WITH DISTRICT_ID WITH PARAMS {id}
+// POST - all district with params {district_id}.
 app.route("/province/district/ward").post(address.ward);
 
+//
 app.listen("3001", () => {
   console.log("server started running on 3001");
 });
