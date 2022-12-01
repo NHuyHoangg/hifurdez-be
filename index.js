@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const productsCtrl = require("./controller/ProductController");
+const address = require("./controller/AddressController");
+
 
 const computerNetworkCtrl = require("./controller/ComputerNetwork");
 
@@ -24,23 +26,38 @@ app.get("/", (req, res) => {
 });
 
 // API ROUTE
-// AUTH
+// AUTH - POST
 app.use("/server/auth", require("./controller/AuthController"));
 
-// GET 8 RANDOM PRODUCTS BY COLLECTION
+// COLLECTION - GET - 8 random products by collection.
 app.route("/product-random-by-spring").get(productsCtrl.randomBySpring);
 app.route("/product-random-by-summer").get(productsCtrl.randomBySummer);
 app.route("/product-random-by-autumn").get(productsCtrl.randomByAutumn);
 app.route("/product-random-by-winter").get(productsCtrl.randomByWinter);
 
-// GET 8 RANDOM PRODUCTS
+// ALL PRODUCT - GET - all product.
+app.route("/all-product").get(productsCtrl.get);
+
+// PRODUCT DETAIL
+// GET - 8 random products
 app.route("/product-random").get(productsCtrl.random);
 
-// POST PRODUCT DETAIL WITH PARAMS {id}
+// POST - product detail with params {id}.
 app.route("/product-by-id").post(productsCtrl.detail);
 
-// GET ALL PRODUCT
-app.route("/all-product").get(productsCtrl.get);
+
+
+// ADDRESS
+// GET - all province
+app.route("/province").get(address.province);
+
+// POST - all district with params {province_id}.
+app.route("/province/district").post(address.district);
+
+// POST - all district with params {district_id}.
+app.route("/province/district/ward").post(address.ward);
+
+//
 
 ////////////////////// COMPUTER NETWORK ///////////////////////////////
 
@@ -50,6 +67,7 @@ app.route("/cn-signup-check-exist").get(computerNetworkCtrl.signupCheckExist);
 app.route("/cn-all-user").get(computerNetworkCtrl.allUser);
 
 ///////////////////////////////////////////////////////////////////////
+
 app.listen("3001", () => {
   console.log("server started running on 3001");
 });
