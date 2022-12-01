@@ -3,6 +3,10 @@ const cors = require("cors");
 const productsCtrl = require("./controller/ProductController");
 const address = require("./controller/AddressController");
 
+
+const computerNetworkCtrl = require("./controller/ComputerNetwork");
+
+
 const app = express();
 
 const corsOptions = {
@@ -42,6 +46,7 @@ app.route("/product-random").get(productsCtrl.random);
 app.route("/product-by-id").post(productsCtrl.detail);
 
 
+
 // ADDRESS
 // GET - all province
 app.route("/province").get(address.province);
@@ -53,6 +58,16 @@ app.route("/province/district").post(address.district);
 app.route("/province/district/ward").post(address.ward);
 
 //
+
+////////////////////// COMPUTER NETWORK ///////////////////////////////
+
+app.route("/cn-login").post(computerNetworkCtrl.login);
+app.route("/cn-signup").post(computerNetworkCtrl.signup);
+app.route("/cn-signup-check-exist").get(computerNetworkCtrl.signupCheckExist);
+app.route("/cn-all-user").get(computerNetworkCtrl.allUser);
+
+///////////////////////////////////////////////////////////////////////
+
 app.listen("3001", () => {
   console.log("server started running on 3001");
 });
