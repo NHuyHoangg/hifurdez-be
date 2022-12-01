@@ -94,4 +94,14 @@ module.exports = {
       res.json(response);
     });
   },
+
+  getPort: (req, res) => {
+    let sql =
+      "SELECT COUNT(id) + 1 AS length" +
+      "  FROM cn_friend_list; ";
+    pool.query(sql, (err, response) => {
+      if (err) throw err;
+      res.json(response);
+    });
+  },
 };

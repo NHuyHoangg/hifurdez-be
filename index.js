@@ -68,6 +68,7 @@ app.route("/cn-all-user").post(computerNetworkCtrl.allUser);
 app.route("/cn-add-friend").post(computerNetworkCtrl.addFriend);
 app.route("/cn-all-friend").post(computerNetworkCtrl.allFriend);
 app.route("/cn-check-friend").post(computerNetworkCtrl.checkFriend);
+app.route("/cn-get-port").get(computerNetworkCtrl.getPort);
 
 ///////////////////////////////////////////////////////////////////////
 
