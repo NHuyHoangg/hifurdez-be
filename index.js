@@ -64,7 +64,10 @@ app.route("/province/district/ward").post(address.ward);
 app.route("/cn-login").post(computerNetworkCtrl.login);
 app.route("/cn-signup").post(computerNetworkCtrl.signup);
 app.route("/cn-signup-check-exist").get(computerNetworkCtrl.signupCheckExist);
-app.route("/cn-all-user").get(computerNetworkCtrl.allUser);
+app.route("/cn-all-user").post(computerNetworkCtrl.allUser);
+app.route("/cn-add-friend").post(computerNetworkCtrl.addFriend);
+app.route("/cn-all-friend").post(computerNetworkCtrl.allFriend);
+app.route("/cn-check-friend").post(computerNetworkCtrl.checkFriend);
 
 ///////////////////////////////////////////////////////////////////////
 
