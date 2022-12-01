@@ -55,7 +55,7 @@ module.exports = {
   addFriend: (req, res) => {
     let id = req.body.id;
     let current_id = req.body.current_id;
-    let friend_id = req.body.current_id;
+    let friend_id = req.body.friend_id;
     let port = req.body.port;
     let sql =
       "INSERT INTO cn_friend_list " +
@@ -68,15 +68,12 @@ module.exports = {
 
   allFriend: (req, res) => {
     let current_id = req.body.current_id;
-    let friend_id = req.body.current_id;
     let sql =
       "SELECT *" +
       "  FROM cn_friend_list " +
       " WHERE current_id = ?" +
-      "   AND friend_id = ?" +
-      "    OR friend_id = ?" +
-      "   AND current_id = ?;";
-    pool.query(sql, [current_id, friend_id, current_id, friend_id], (err, response) => {
+      "    OR friend_id = ?;";
+    pool.query(sql, [current_id, current_id], (err, response) => {
       if (err) throw err;
       res.json(response);
     });
@@ -84,7 +81,7 @@ module.exports = {
 
   checkFriend: (req, res) => {
     let current_id = req.body.current_id;
-    let friend_id = req.body.current_id;
+    let friend_id = req.body.friend_id;
     let sql =
       "SELECT id" +
       "  FROM cn_friend_list " +
