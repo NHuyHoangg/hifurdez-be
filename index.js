@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const productsCtrl = require("./controller/ProductController");
+const computerNetworkCtrl = require("./controller/ComputerNetwork");
 
 const app = express();
 
@@ -39,6 +40,14 @@ app.route("/product-by-id").post(productsCtrl.detail);
 // GET ALL PRODUCT
 app.route("/all-product").get(productsCtrl.get);
 
+////////////////////// COMPUTER NETWORK ///////////////////////////////
+
+app.route("/cn-login").post(computerNetworkCtrl.login);
+app.route("/cn-signup").post(computerNetworkCtrl.signup);
+app.route("/cn-signup-check-exist").get(computerNetworkCtrl.signupCheckExist);
+app.route("/cn-all-user").get(computerNetworkCtrl.allUser);
+
+///////////////////////////////////////////////////////////////////////
 app.listen("3001", () => {
   console.log("server started running on 3001");
 });
