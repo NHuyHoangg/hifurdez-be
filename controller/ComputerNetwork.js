@@ -32,7 +32,7 @@ module.exports = {
     let username = req.body.username;
     let password = req.body.password;
     let sql = 
-      "INSERT INTO cn_account" +
+      "INSERT INTO cn_account " +
       "VALUES (?, ?, ?);"; 
     pool.query(sql, [id, username, password], (err, response) => {
       if (err) throw err;
@@ -41,7 +41,7 @@ module.exports = {
   },
 
   allUser: (req, res) => {
-    let current_id = req.query.current_id;
+    let current_id = req.body.current_id;
     let sql =
       "SELECT *" +
       "  FROM cn_account" +
@@ -52,4 +52,49 @@ module.exports = {
     });
   },
 
+  addFriend: (req, res) => {
+    let id = req.body.id;
+    let current_id = req.body.current_id;
+    let friend_id = req.body.current_id;
+    let port = req.body.port;
+    let sql =
+      "INSERT INTO cn_friend_list " +
+      "VALUES (?, ?, ?, ?);"; 
+    pool.query(sql, [id, current_id, friend_id, port], (err, response) => {
+      if (err) throw err;
+      res.json(response);
+    });
+  },
+
+  allFriend: (req, res) => {
+    let current_id = req.body.current_id;
+    let friend_id = req.body.current_id;
+    let sql =
+      "SELECT *" +
+      "  FROM cn_friend_list " +
+      " WHERE current_id = ?" +
+      "   AND friend_id = ?" +
+      "    OR friend_id = ?" +
+      "   AND current_id = ?;";
+    pool.query(sql, [current_id, friend_id, current_id, friend_id], (err, response) => {
+      if (err) throw err;
+      res.json(response);
+    });
+  },
+
+  checkFriend: (req, res) => {
+    let current_id = req.body.current_id;
+    let friend_id = req.body.current_id;
+    let sql =
+      "SELECT id" +
+      "  FROM cn_friend_list " +
+      " WHERE current_id = ?" +
+      "   AND friend_id = ?" +
+      "    OR friend_id = ?" +
+      "   AND current_id = ?;";
+    pool.query(sql, [current_id, friend_id, current_id, friend_id], (err, response) => {
+      if (err) throw err;
+      res.json(response);
+    });
+  },
 };
