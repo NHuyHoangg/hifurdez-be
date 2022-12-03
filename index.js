@@ -3,9 +3,7 @@ const cors = require("cors");
 const productsCtrl = require("./controller/ProductController");
 const address = require("./controller/AddressController");
 
-
 const computerNetworkCtrl = require("./controller/ComputerNetwork");
-
 
 const app = express();
 
@@ -16,6 +14,14 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+app.use(function (req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Credentials", true);
+  next();
+});
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -44,8 +50,6 @@ app.route("/product-random").get(productsCtrl.random);
 
 // POST - product detail with params {id}.
 app.route("/product-by-id").post(productsCtrl.detail);
-
-
 
 // ADDRESS
 // GET - all province
