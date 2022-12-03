@@ -3,6 +3,9 @@ const { pool } = require("../database/dbinfo");
 
 module.exports = {
   get: (req, res) => {
+      res.set("Access-Control-Allow-Origin", "*");
+      res.set("Access-Control-Allow-Methods", "GET, POST");
+      res.set("Access-Control-Allow-Headers", "Content-Type");
     let sql =
       "SELECT product_product.sku " +
       "     , product_product.id " +
@@ -42,6 +45,9 @@ module.exports = {
     });
   },
   detail: (req, res) => {
+          res.set("Access-Control-Allow-Origin", "*");
+          res.set("Access-Control-Allow-Methods", "GET, POST");
+          res.set("Access-Control-Allow-Headers", "Content-Type");
     let data = req.body.id;
     let sql = 
       "SELECT *" +
@@ -70,6 +76,9 @@ module.exports = {
   },
 
   randomBySpring: (req, res) => {
+          res.set("Access-Control-Allow-Origin", "*");
+          res.set("Access-Control-Allow-Methods", "GET, POST");
+          res.set("Access-Control-Allow-Headers", "Content-Type");
     let sql =
       "SELECT id" +
       "     , product_name" +
@@ -88,6 +97,9 @@ module.exports = {
   },
 
   randomBySummer: (req, res) => {
+          res.set("Access-Control-Allow-Origin", "*");
+          res.set("Access-Control-Allow-Methods", "GET, POST");
+          res.set("Access-Control-Allow-Headers", "Content-Type");
     let sql =
       "SELECT id" +
       "     , product_name" +
@@ -106,6 +118,9 @@ module.exports = {
   },
 
   randomByAutumn: (req, res) => {
+          res.set("Access-Control-Allow-Origin", "*");
+          res.set("Access-Control-Allow-Methods", "GET, POST");
+          res.set("Access-Control-Allow-Headers", "Content-Type");
     let sql =
       "SELECT id" +
       "     , product_name" +
@@ -124,6 +139,9 @@ module.exports = {
   },
 
   randomByWinter: (req, res) => {
+          res.set("Access-Control-Allow-Origin", "*");
+          res.set("Access-Control-Allow-Methods", "GET, POST");
+          res.set("Access-Control-Allow-Headers", "Content-Type");
     let sql =
       "SELECT id" +
       "     , product_name" +
