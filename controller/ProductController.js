@@ -3,9 +3,9 @@ const { pool } = require("../database/dbinfo");
 
 module.exports = {
   get: (req, res) => {
-      res.set("Access-Control-Allow-Origin", "*");
-      res.set("Access-Control-Allow-Methods", "GET, POST");
-      res.set("Access-Control-Allow-Headers", "Content-Type");
+    res.set("Access-Control-Allow-Origin", "*");
+    res.set("Access-Control-Allow-Methods", "GET, POST");
+    res.set("Access-Control-Allow-Headers", "Content-Type");
     let sql =
       "SELECT product_product.sku " +
       "     , product_product.id " +
@@ -15,7 +15,10 @@ module.exports = {
       "     , product_collection.name AS collection_name " +
       "     , product_category.name AS category_name " +
       "     , REPLACE(media_1.content, 'FFFFFF', 'f0eae2') AS product_image_1 " +
-      "     , media_2.content AS product_image_2 " +
+      "     , CASE " +
+      "         WHEN UPPER(media_2.content) LIKE '%-DIM%' THEN 'https://res.cloudinary.com/castlery/image/private/b_rgb:f0eae2,c_fit,f_auto,q_auto,w_1000/v1624969337/crusader/variants/50440634-PL4001/Hans-3-Seater-Sofa-Light-Grey-Revamped-Lifestyle-Crop.jpg' " +
+      "         ELSE media_2.content " +
+      "       END AS product_image_2 " +
       "  FROM product_product " +
       "  LEFT JOIN product_collection " +
       "    ON product_product.collection_id = product_collection.id " +
@@ -45,9 +48,9 @@ module.exports = {
     });
   },
   detail: (req, res) => {
-          res.set("Access-Control-Allow-Origin", "*");
-          res.set("Access-Control-Allow-Methods", "GET, POST");
-          res.set("Access-Control-Allow-Headers", "Content-Type");
+    res.set("Access-Control-Allow-Origin", "*");
+    res.set("Access-Control-Allow-Methods", "GET, POST");
+    res.set("Access-Control-Allow-Headers", "Content-Type");
     let data = req.body.id;
     let sql = 
       "SELECT *" +
@@ -76,9 +79,9 @@ module.exports = {
   },
 
   randomBySpring: (req, res) => {
-          res.set("Access-Control-Allow-Origin", "*");
-          res.set("Access-Control-Allow-Methods", "GET, POST");
-          res.set("Access-Control-Allow-Headers", "Content-Type");
+    res.set("Access-Control-Allow-Origin", "*");
+    res.set("Access-Control-Allow-Methods", "GET, POST");
+    res.set("Access-Control-Allow-Headers", "Content-Type");
     let sql =
       "SELECT id" +
       "     , product_name" +
@@ -97,9 +100,9 @@ module.exports = {
   },
 
   randomBySummer: (req, res) => {
-          res.set("Access-Control-Allow-Origin", "*");
-          res.set("Access-Control-Allow-Methods", "GET, POST");
-          res.set("Access-Control-Allow-Headers", "Content-Type");
+    res.set("Access-Control-Allow-Origin", "*");
+    res.set("Access-Control-Allow-Methods", "GET, POST");
+    res.set("Access-Control-Allow-Headers", "Content-Type");
     let sql =
       "SELECT id" +
       "     , product_name" +
