@@ -9,7 +9,8 @@ const app = express();
 
 const corsOptions = {
   origin: ["http://localhost:3000", "https://www.hifurdez.studio/"],
-  credentials: true, //access-control-allow-credentials:true
+  credentials: true,
+  // access-control-allow-credentials:true,
   optionSuccessStatus: 200,
 };
 
