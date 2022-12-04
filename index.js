@@ -1,15 +1,20 @@
 const express = require("express");
+const app = express();
 const cors = require("cors");
 const productsCtrl = require("./controller/ProductController");
 const address = require("./controller/AddressController");
 
 const computerNetworkCtrl = require("./controller/ComputerNetwork");
 
-const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
 const corsOptions = {
-  origin: ["http://localhost:3000", "https://www.hifurdez.studio"],
+  origin: [
+    "http://localhost:3000",
+    "https://www.hifurdez.studio",
+    "https://testfehifurdez.vercel.app",
+  ],
   credentials: true,
   method: ["GET", "PUT", "POST"],
   allowedHeaders: [
@@ -30,14 +35,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.use(function (req, res, next) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  res.setHeader("Access-Control-Allow-Credentials", true);
-  next();
-});
-
+app.options("", cors(corsOptions));
 app.get("/", (req, res) => {
   res.send(
     "<html> <img src='https://ik.imagekit.io/amnd3xdhd/316166119_526826592671589_9115068966916421847_n.png?ik-sdk-version=javascript-1.4.3&updatedAt=1669486983800' style='height: 100%'></html>"
@@ -55,7 +53,7 @@ app.route("/product-random-by-autumn").get(productsCtrl.randomByAutumn);
 app.route("/product-random-by-winter").get(productsCtrl.randomByWinter);
 
 // ALL PRODUCT - GET - all product.
-app.route("/all-product").get(productsCtrl.get);
+app.route("/all-product").get(cors(corsOptions),productsCtrl.get);
 
 // PRODUCT DETAIL
 // GET - 8 random products
@@ -88,7 +86,7 @@ app.route("/cn-check-friend").post(computerNetworkCtrl.checkFriend);
 app.route("/cn-get-port").get(computerNetworkCtrl.getPort);
 
 ///////////////////////////////////////////////////////////////////////
-
-app.listen("3001", () => {
-  console.log("server started running on 3001");
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log("Server started running on " + port);
 });
