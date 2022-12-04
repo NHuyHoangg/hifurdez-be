@@ -1,12 +1,8 @@
 "use strict";
-const { json } = require("body-parser");
 const { pool } = require("../database/dbinfo");
 
 module.exports = {
   products: (req, res) => {
-    res.set("Access-Control-Allow-Origin", "*");
-    res.set("Access-Control-Allow-Methods", "GET, POST");
-    res.set("Access-Control-Allow-Headers", "Content-Type");
     let sql = 
         "SELECT pdt.id AS product_id" +
         "     , clt.name AS collection" +
@@ -28,9 +24,6 @@ module.exports = {
   },
 
   productsDetail: (req, res) => {
-    res.set("Access-Control-Allow-Origin", "*");
-    res.set("Access-Control-Allow-Methods", "GET, POST");
-    res.set("Access-Control-Allow-Headers", "Content-Type");
     let id = req.body.id;
     let sql = 
         "SELECT sku" +
@@ -59,9 +52,6 @@ module.exports = {
   },
 
   sale: (req, res) => {
-    res.set("Access-Control-Allow-Origin", "*");
-    res.set("Access-Control-Allow-Methods", "GET, POST");
-    res.set("Access-Control-Allow-Headers", "Content-Type");
     let sql = 
         "SELECT sale.id AS order_id" +
         "     , sale.name AS code" +
@@ -81,36 +71,51 @@ module.exports = {
   },
 
   saleDetail: (req, res) => {
-    res.set("Access-Control-Allow-Origin", "*");
-    res.set("Access-Control-Allow-Methods", "GET, POST");
-    res.set("Access-Control-Allow-Headers", "Content-Type");
     let result = {};
     let id = req.body.id;
     let saleInfo = 
         "SELECT sale.name AS so_code" +
         "     , tc.code AS transport_card_code"+
-        "     , DATE_FORMAT(sale.delivery_date, '%Y/%m/%d') AS delivery_date" +
+        "     , DATE_FORMAT(sale.commitment_date, '%Y/%m/%d') AS delivery_date" +
         "     , product_amount" +
-        "     , rp.name AS supplier_name" +
-        "     , rp.phone AS supplier_phone" +
-        "     , is_active" +
+        "     , rp.name AS customer_name" +
+        "     , rp.phone AS customer_phone" +
+        "     , rp.street AS street" +
+        "     , (SELECT name"+
+        "          FROM res_ward"+
+        "         WHERE res_ward.id = rp.ward_id) AS ward"+
+        "     , (SELECT name"+
+        "          FROM res_district"+
+        "         WHERE res_district.id = rp.district_id) AS district"+
+        "     , (SELECT name"+
+        "          FROM res_province"+
+        "         WHERE res_province.id = rp.province_id) AS province"+
         "  FROM sale_order AS sale" +
         "  LEFT JOIN res_partner AS rp" +
-        "    ON sale.supplier_id = rp.id"+
-        "  LEFT JOIN stock_move AS sm" +
-        "    ON sale.id = sm.po_id" +
+        "    ON sale.customer_id = rp.id"+
+        "  LEFT JOIN transport_card AS tc" +
+        "    ON sale.id = tc.sale_order_id" +
         " WHERE sale.id = ?" +
         " LIMIT 1;";
-    pool.query(saleInfo, [id, id], (err, response) => {
+    pool.query(saleInfo, [id], (err, response) => {
         if (err) throw err;
         result['sale_order'] = response;
         let saleOrderLine = 
-            "SELECT name" +
+            "SELECT pd.name AS product_name" +
             "     , price_unit AS price" +
+            "     ,("+
+            "       SELECT clt.name"+
+            "       FROM product_collection AS clt"+
+            "       LEFT JOIN product_product "+
+            "         ON product_product.collection_id = clt.id"+
+            "      WHERE product_id = sale_order_line.product_id"+
+            "     ) AS collection_name"+
             "     , product_amount" +
             "     , total_price" +
-            "  FROM purchaser_order_line" +
-            " WHERE po_id = ?;";
+            "  FROM sale_order_line" +
+            "  LEFT JOIN product_product AS pd" +
+            "    ON sale_order_line.product_id = pd.id" +
+            " WHERE so_id = ?;";
         pool.query(saleOrderLine, [id], (err2, response2) => {
             if (err2) throw err2;
             result['sale_order_line'] = response2;
@@ -120,9 +125,6 @@ module.exports = {
   },
 
   purchase: (req, res) => {
-    res.set("Access-Control-Allow-Origin", "*");
-    res.set("Access-Control-Allow-Methods", "GET, POST");
-    res.set("Access-Control-Allow-Headers", "Content-Type");
     let sql = 
         "SELECT purchase.id AS order_id" +
         "     , purchase.name AS code" +
@@ -142,9 +144,6 @@ module.exports = {
   },
 
   purchaseDetail: (req, res) => {
-    res.set("Access-Control-Allow-Origin", "*");
-    res.set("Access-Control-Allow-Methods", "GET, POST");
-    res.set("Access-Control-Allow-Headers", "Content-Type");
     let result = {};
     let id = req.body.id;
     let purchaseInfo = 
@@ -187,9 +186,6 @@ module.exports = {
   },
 
   thirdParty: (req, res) => {
-    res.set("Access-Control-Allow-Origin", "*");
-    res.set("Access-Control-Allow-Methods", "GET, POST");
-    res.set("Access-Control-Allow-Headers", "Content-Type");
     let sql = 
         "SELECT id" +
         "     , name" +
@@ -205,9 +201,6 @@ module.exports = {
   },
 
   thirdPartyDetail: (req, res) => {
-    res.set("Access-Control-Allow-Origin", "*");
-    res.set("Access-Control-Allow-Methods", "GET, POST");
-    res.set("Access-Control-Allow-Headers", "Content-Type");
     let result = {};
     let id = req.body.id;
     let thirdPartyInfo = 
@@ -239,9 +232,6 @@ module.exports = {
   },
 
   thirdPartyEmployee: (req, res) => {
-    res.set("Access-Control-Allow-Origin", "*");
-    res.set("Access-Control-Allow-Methods", "GET, POST");
-    res.set("Access-Control-Allow-Headers", "Content-Type");
     let sql = 
         "SELECT employee.id AS id" +
         "     , driver_name" +
@@ -260,9 +250,6 @@ module.exports = {
   },
 
   thirdPartyEmployeeDetail: (req, res) => {
-    res.set("Access-Control-Allow-Origin", "*");
-    res.set("Access-Control-Allow-Methods", "GET, POST");
-    res.set("Access-Control-Allow-Headers", "Content-Type");
     let result = {};
     let id = req.body.id;
     let thirdPartyEmployeeInfo = 
@@ -282,7 +269,7 @@ module.exports = {
         result['thirdPartyEmployeeInfo'] = response;
         let thirdPartyEmployeeOrder = 
             "SELECT tc.code" +
-            "     , tc.delivery_date" +
+            "     , DATE_FORMAT(tc.delivery_date, '%Y/%m/%d') AS delivery_date" +
             "     , so.amount_total" +
             "     , so.product_amount" +
             "     , tc.status" +
@@ -299,10 +286,22 @@ module.exports = {
   },
 
   warehouse: (req, res) => {
-    res.set("Access-Control-Allow-Origin", "*");
-    res.set("Access-Control-Allow-Methods", "GET, POST");
-    res.set("Access-Control-Allow-Headers", "Content-Type");
-    let sql = "";
+    let sql = 
+      "SELECT sw.id" +
+      "     , sw.code" +
+      "     , sw.name" +
+      "     , sw.street" +
+      "     , rw.name AS ward" +
+      "     , rd.name AS district" +
+      "     , rp.name AS province" +
+      "     , is_active" +
+      "  FROM stock_warehouse AS sw" +
+      "  LEFT JOIN res_ward AS rw" +
+      "    ON sw.ward_id = rw.id" +
+      "  LEFT JOIN res_district AS rd" +
+      "    ON sw.district_id = rd.id" +
+      "  LEFT JOIN res_province AS rp" +
+      "    ON sw.province_id = rp.id;";
     pool.query(sql, (err, response) => {
       if (err) throw err;
       res.json(response);
@@ -310,14 +309,120 @@ module.exports = {
   },
 
   warehouseDetail: (req, res) => {
-    res.set("Access-Control-Allow-Origin", "*");
-    res.set("Access-Control-Allow-Methods", "GET, POST");
-    res.set("Access-Control-Allow-Headers", "Content-Type");
     let id = req.body.id;
-    let sql = ""
-    pool.query(sql, [id], (err, response) => {
+    let result = {};
+    let warehouseInfo =
+      "SELECT sw.name" +
+      "     , sw.code" +
+      "     , sw.street" +
+      "     , rw.name AS ward" +
+      "     , rd.name AS district" +
+      "     , rp.name AS province" +
+      "     , is_active" +
+      "  FROM stock_warehouse AS sw" +
+      "  LEFT JOIN res_ward AS rw" +
+      "    ON sw.ward_id = rw.id" +
+      "  LEFT JOIN res_district AS rd" +
+      "    ON sw.district_id = rd.id" +
+      "  LEFT JOIN res_province AS rp" +
+      "    ON sw.province_id = rp.id" +
+      " WHERE sw.id = ?;";
+    pool.query(warehouseInfo, [id], (err, response) => {
       if (err) throw err;
-      res.json(response);
+      result['warehouseInfo'] = response;
+      let receive = 
+        "SELECT x.picking_code AS picking_code" +
+        "     , DATE_FORMAT(x.date, '%Y/%m/%d') AS date" +
+        "     , sm.name AS code" +
+        "     , po.product_amount AS product_amount" +
+        "     , x.third_party_name AS third_party_name" +
+        "  FROM stock_move AS sm" +
+        "  LEFT JOIN "+
+        "     (SELECT sp.id AS id" +
+        "           , sp.name AS picking_code" +
+        "           , sp.warehouse_id AS warehouse_id" +
+        "           , sp.dest_warehouse_id AS dest_warehouse_id" +
+        "           , sp.delivery_date AS date" +
+        "           , tpt.name AS third_party_name" +
+        "        FROM stock_picking AS sp" +
+        "        LEFT JOIN third_party_company AS tpt" +
+        "          ON sp.third_party_id = tpt.id) AS x" +
+        "    ON sm.stock_picking_id = x.id" +
+        "  LEFT JOIN purchaser_order AS po" +
+        "    ON sm.po_id = po.id" +
+        " WHERE x.warehouse_id IS NULL AND x.dest_warehouse_id = ? ";
+      pool.query(receive, [id], (err1, response1) => {
+        if (err1) throw err1;
+        result['receive'] = response1;
+        let transfer = 
+          "SELECT x.picking_code AS transfer_code" +
+          "     , DATE_FORMAT(x.date, '%Y/%m/%d') AS date" +
+          "     , x.third_party_name AS third_party_name" +
+          "     , po.product_amount AS product_amount" +
+          "     , x.src_name AS src_warehouse" +
+          "     , x.dest_name AS dest_warehouse" +
+          "  FROM stock_move AS sm" +
+          "  LEFT JOIN "+
+          "     (SELECT sp.id AS id" +
+          "           , sp.name AS picking_code" +
+          "           , sp.warehouse_id AS warehouse_id" +
+          "           , (CASE" +
+          "                  WHEN sp.warehouse_id = 1 THEN 'Ho Chi Minh City'" +
+          "                  ELSE 'Binh Duong Province'" +
+          "              END) AS src_name" +
+          "           , sp.dest_warehouse_id AS dest_warehouse_id" +
+          "           , (CASE" +
+          "                  WHEN sp.dest_warehouse_id = 1 THEN 'Ho Chi Minh City'" +
+          "                  ELSE 'Binh Duong Province'" +
+          "              END) AS dest_name" +
+          "           , sp.delivery_date AS date" +
+          "           , tpt.name AS third_party_name" +
+          "        FROM stock_picking AS sp" +
+          "        LEFT JOIN third_party_company AS tpt" +
+          "          ON sp.third_party_id = tpt.id) AS x" +
+          "    ON sm.stock_picking_id = x.id" +
+          "  LEFT JOIN purchaser_order AS po" +
+          "    ON sm.po_id = po.id " +
+          " WHERE x.warehouse_id = ?;";
+        pool.query(transfer, [id], (err2, response2) => {
+          if (err2) throw err2;
+          result['transfer'] = response2;
+          let delivery = 
+            "SELECT tc.code AS code" +
+            "     , x.customer_name AS customer_name" +
+            "     , x.amount_total AS amount_total" +
+            "     , x.product_amount AS product_amount" +
+            "     , tpt.name AS third_party" +
+            "     , tc.street AS street" +
+            "     , rw.name AS ward" +
+            "     , rd.name AS district" +
+            "     , rp.name AS province" +
+            "  FROM transport_card  AS tc" +
+            "  LEFT JOIN " +
+            "            (SELECT so.product_amount AS product_amount" +
+            "                  , so.id AS id"+
+            "                  , so.amount_total AS amount_total"+
+            "                  , ctm.name AS customer_name"+
+            "               FROM sale_order AS so"+
+            "               LEFT JOIN res_partner AS ctm"+
+            "                 ON so.customer_id = ctm.id) AS x"+
+            "         ON x.id = tc.sale_order_id "+          
+            "  LEFT JOIN third_party_company AS tpt" +
+            "    ON tc.third_party_id = tpt.id" +
+            "  LEFT JOIN res_ward AS rw" +
+            "    ON tc.ward_id = rw.id" +
+            "  LEFT JOIN res_district AS rd" +
+            "    ON tc.district_id = rd.id" +
+            "  LEFT JOIN res_province AS rp" +
+            "    ON tc.province_id = rp.id" +
+            " WHERE tc.warehouse_id = ?;";
+          pool.query(delivery, [id], (err3, response3) => {
+            if (err3) throw err3;
+            result['delivery'] = response3;
+            res.json(result);
+          });
+        });
+      });
     });
   },
 };
