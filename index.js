@@ -8,9 +8,25 @@ const computerNetworkCtrl = require("./controller/ComputerNetwork");
 const app = express();
 
 const corsOptions = {
-  origin: ["http://localhost:3000", "https://www.hifurdez.studio/"],
+  origin: [
+    "http://localhost:3000",
+    "https://www.hifurdez.studio"
+  ],
   credentials: true,
-  // access-control-allow-credentials:true,
+  method: ["GET", "PUT", "POST"],
+  allowedHeaders: [
+    "Origin",
+    "X-CSRF-Token",
+    "X-Requested-With",
+    "Accept",
+    "Accept-Version",
+    "Content-Length",
+    "Content-MD5",
+    "Content-Type",
+    "Date",
+    "X-Api-Version",
+    "Authorization",
+  ],
   optionSuccessStatus: 200,
 };
 
