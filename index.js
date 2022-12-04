@@ -35,7 +35,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.options("", cors(corsOptions));
+app.options("/", cors(corsOptions));
 app.get("/", (req, res) => {
   res.send(
     "<html> <img src='https://ik.imagekit.io/amnd3xdhd/316166119_526826592671589_9115068966916421847_n.png?ik-sdk-version=javascript-1.4.3&updatedAt=1669486983800' style='height: 100%'></html>"
@@ -53,7 +53,7 @@ app.route("/product-random-by-autumn").get(productsCtrl.randomByAutumn);
 app.route("/product-random-by-winter").get(productsCtrl.randomByWinter);
 
 // ALL PRODUCT - GET - all product.
-app.route("/all-product").get(cors(corsOptions),productsCtrl.get);
+app.route("/all-product").get(productsCtrl.get);
 
 // PRODUCT DETAIL
 // GET - 8 random products
