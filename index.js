@@ -2,8 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const productsCtrl = require("./controller/ProductController");
 const address = require("./controller/AddressController");
-
 const computerNetworkCtrl = require("./controller/ComputerNetwork");
+const adminCtrl = require("./controller/AdminController");
 
 const app = express();
 
@@ -62,8 +62,8 @@ app.route("/province/district").post(address.district);
 // POST - all district with params {district_id}.
 app.route("/province/district/ward").post(address.ward);
 
-//
-
+// GET - admin user
+app.route("/admin/users").get(adminCtrl.users);
 ////////////////////// COMPUTER NETWORK ///////////////////////////////
 
 app.route("/cn-login").post(computerNetworkCtrl.login);
