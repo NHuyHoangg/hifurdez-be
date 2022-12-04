@@ -69,10 +69,34 @@ app.route("/admin/products").get(adminCtrl.products);
 app.route("/admin/products/detail").post(adminCtrl.productsDetail);
 
 // GET - admin purchase order
+app.route("/admin/order/sale").get(adminCtrl.sale);
+
+// POST - admin purchase order with params {po_id}
+app.route("/admin/order/sale/detail").post(adminCtrl.saleDetail);
+
+// GET - admin purchase order
 app.route("/admin/order/purchase").get(adminCtrl.purchase);
 
 // POST - admin purchase order with params {po_id}
 app.route("/admin/order/purchase/detail").post(adminCtrl.purchaseDetail);
+
+// GET - admin third party logistic
+app.route("/admin/3pls").get(adminCtrl.thirdParty);
+
+// POST - admin third party logistic with params {3pls_id}
+app.route("/admin/3pls/detail").post(adminCtrl.thirdPartyDetail);
+
+// GET - admin third party logistic employee
+app.route("/admin/3plse").get(adminCtrl.thirdPartyEmployee);
+
+// POST - admin third party logistic employee with params {employee_id}
+app.route("/admin/3plse/detail").post(adminCtrl.thirdPartyEmployeeDetail);
+
+// GET - admin warehouse
+app.route("/admin/warehouse").get(adminCtrl.warehouse);
+
+// POST - admin warehouse with params {warehouse_id}
+app.route("/admin/warehouse/detail").post(adminCtrl.warehouseDetail);
 
 //////////////////////////////////////////////////////////////////////
 app.listen("3001", () => {
