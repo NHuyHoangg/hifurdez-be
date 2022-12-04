@@ -10,8 +10,7 @@ const app = express();
 const corsOptions = {
   origin: [
     "http://localhost:3000",
-    "https://www.hifurdez.studio",
-    "https://testfehifurdez.vercel.app",
+    "https://www.hifurdez.studio"
   ],
   credentials: true,
   method: ["GET", "PUT", "POST"],
