@@ -1,30 +1,40 @@
 const express = require("express");
+const app = express();
 const cors = require("cors");
 const productsCtrl = require("./controller/ProductController");
 const address = require("./controller/AddressController");
 const adminCtrl = require("./controller/AdminController");
 
-const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 const corsOptions = {
-  origin: ["http://localhost:3000", "https://www.hifurdez.studio/"],
+  origin: [
+    "http://localhost:3000",
+    "https://www.hifurdez.studio",
+    "https://testfehifurdez.vercel.app",
+  ],
   credentials: true,
-  // access-control-allow-credentials:true,
+  method: ["GET", "PUT", "POST"],
+  allowedHeaders: [
+    "Origin",
+    "X-CSRF-Token",
+    "X-Requested-With",
+    "Accept",
+    "Accept-Version",
+    "Content-Length",
+    "Content-MD5",
+    "Content-Type",
+    "Date",
+    "X-Api-Version",
+    "Authorization",
+  ],
   optionSuccessStatus: 200,
 };
 
 app.use(cors(corsOptions));
 
-app.use(function (req, res, next) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  res.setHeader("Access-Control-Allow-Credentials", true);
-  next();
-});
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-
+app.options("/", cors(corsOptions));
 app.get("/", (req, res) => {
   res.send(
     "<html> <img src='https://ik.imagekit.io/amnd3xdhd/316166119_526826592671589_9115068966916421847_n.png?ik-sdk-version=javascript-1.4.3&updatedAt=1669486983800' style='height: 100%'></html>"
@@ -99,6 +109,8 @@ app.route("/admin/warehouse").get(adminCtrl.warehouse);
 app.route("/admin/warehouse/detail").post(adminCtrl.warehouseDetail);
 
 //////////////////////////////////////////////////////////////////////
-app.listen("3001", () => {
-  console.log("server started running on 3001");
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log("Server started running on " + port);
+
 });
