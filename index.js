@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const productsCtrl = require("./controller/ProductController");
 const address = require("./controller/AddressController");
-const computerNetworkCtrl = require("./controller/ComputerNetwork");
 const adminCtrl = require("./controller/AdminController");
 
 const app = express();
@@ -62,21 +61,20 @@ app.route("/province/district").post(address.district);
 // POST - all district with params {district_id}.
 app.route("/province/district/ward").post(address.ward);
 
-// GET - admin user
-app.route("/admin/users").get(adminCtrl.users);
-////////////////////// COMPUTER NETWORK ///////////////////////////////
+// ADMIN
+// GET - admin products
+app.route("/admin/products").get(adminCtrl.products);
 
-app.route("/cn-login").post(computerNetworkCtrl.login);
-app.route("/cn-signup").post(computerNetworkCtrl.signup);
-app.route("/cn-signup-check-exist").get(computerNetworkCtrl.signupCheckExist);
-app.route("/cn-all-user").post(computerNetworkCtrl.allUser);
-app.route("/cn-add-friend").post(computerNetworkCtrl.addFriend);
-app.route("/cn-all-friend").post(computerNetworkCtrl.allFriend);
-app.route("/cn-check-friend").post(computerNetworkCtrl.checkFriend);
-app.route("/cn-get-port").get(computerNetworkCtrl.getPort);
+// POST - admin products with params {product_id}
+app.route("/admin/products/detail").post(adminCtrl.productsDetail);
 
-///////////////////////////////////////////////////////////////////////
+// GET - admin purchase order
+app.route("/admin/order/purchase").get(adminCtrl.purchase);
 
+// POST - admin purchase order with params {po_id}
+app.route("/admin/order/purchase/detail").post(adminCtrl.purchaseDetail);
+
+//////////////////////////////////////////////////////////////////////
 app.listen("3001", () => {
   console.log("server started running on 3001");
 });
