@@ -3,8 +3,7 @@ const app = express();
 const cors = require("cors");
 const productsCtrl = require("./controller/ProductController");
 const address = require("./controller/AddressController");
-
-const computerNetworkCtrl = require("./controller/ComputerNetwork");
+const adminCtrl = require("./controller/AdminController");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -72,21 +71,46 @@ app.route("/province/district").post(address.district);
 // POST - all district with params {district_id}.
 app.route("/province/district/ward").post(address.ward);
 
-//
+// ADMIN
+// GET - admin products
+app.route("/admin/products").get(adminCtrl.products);
 
-////////////////////// COMPUTER NETWORK ///////////////////////////////
+// POST - admin products with params {product_id}
+app.route("/admin/products/detail").post(adminCtrl.productsDetail);
 
-app.route("/cn-login").post(computerNetworkCtrl.login);
-app.route("/cn-signup").post(computerNetworkCtrl.signup);
-app.route("/cn-signup-check-exist").get(computerNetworkCtrl.signupCheckExist);
-app.route("/cn-all-user").post(computerNetworkCtrl.allUser);
-app.route("/cn-add-friend").post(computerNetworkCtrl.addFriend);
-app.route("/cn-all-friend").post(computerNetworkCtrl.allFriend);
-app.route("/cn-check-friend").post(computerNetworkCtrl.checkFriend);
-app.route("/cn-get-port").get(computerNetworkCtrl.getPort);
+// GET - admin purchase order
+app.route("/admin/order/sale").get(adminCtrl.sale);
 
-///////////////////////////////////////////////////////////////////////
+// POST - admin purchase order with params {po_id}
+app.route("/admin/order/sale/detail").post(adminCtrl.saleDetail);
+
+// GET - admin purchase order
+app.route("/admin/order/purchase").get(adminCtrl.purchase);
+
+// POST - admin purchase order with params {po_id}
+app.route("/admin/order/purchase/detail").post(adminCtrl.purchaseDetail);
+
+// GET - admin third party logistic
+app.route("/admin/3pls").get(adminCtrl.thirdParty);
+
+// POST - admin third party logistic with params {3pls_id}
+app.route("/admin/3pls/detail").post(adminCtrl.thirdPartyDetail);
+
+// GET - admin third party logistic employee
+app.route("/admin/3plse").get(adminCtrl.thirdPartyEmployee);
+
+// POST - admin third party logistic employee with params {employee_id}
+app.route("/admin/3plse/detail").post(adminCtrl.thirdPartyEmployeeDetail);
+
+// GET - admin warehouse
+app.route("/admin/warehouse").get(adminCtrl.warehouse);
+
+// POST - admin warehouse with params {warehouse_id}
+app.route("/admin/warehouse/detail").post(adminCtrl.warehouseDetail);
+
+//////////////////////////////////////////////////////////////////////
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log("Server started running on " + port);
+
 });
