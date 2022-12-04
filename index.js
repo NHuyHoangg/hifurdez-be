@@ -6,12 +6,10 @@ const address = require("./controller/AddressController");
 const computerNetworkCtrl = require("./controller/ComputerNetwork");
 
 const app = express();
-
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 const corsOptions = {
-  origin: [
-    "http://localhost:3000",
-    "https://www.hifurdez.studio"
-  ],
+  origin: ["http://localhost:3000", "https://www.hifurdez.studio"],
   credentials: true,
   method: ["GET", "PUT", "POST"],
   allowedHeaders: [
@@ -39,8 +37,6 @@ app.use(function (req, res, next) {
   res.setHeader("Access-Control-Allow-Credentials", true);
   next();
 });
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => {
   res.send(
