@@ -59,7 +59,7 @@ module.exports = {
     let sql =
       "SELECT" +
       "    DATE_FORMAT(create_date, '%Y/%m/%d') as created_date," +
-      "    TIMESTAMPDIFF(hour, last_active, CURRENT_TIMESTAMP) as last_active," +
+      "    DATE_FORMAT(last_active, '%Y/%m/%d') as last_active," +
       "    name," +
       "    user_mail," +
       "    display_name," +
@@ -84,34 +84,16 @@ module.exports = {
       "    rp.user_mail AS email," +
       "    phone," +
       "    rp.street AS street," +
-      "    ( " +
-      "        SELECT " +
-      "            name" +
-      "        FROM" +
-      "            res_ward" +
-      "        WHERE" +
-      "            res_ward.id = rp.ward_id" +
-      "    ) AS ward," +
-      "    (" +
-      "        SELECT" +
-      "            name" +
-      "        FROM" +
-      "            res_district" +
-      "        WHERE" +
-      "            res_district.id = rp.district_id" +
-      "    ) AS district," +
-      "    (" +
-      "        SELECT" +
-      "            name" +
-      "        FROM" +
-      "            res_province" +
-      "        WHERE" +
-      "            res_province.id = rp.province_id" +
-      "    ) AS province" +
+      "    rw.name AS ward," +
+      "    rd.name AS district," +
+      "    rpp.name AS province" +
       " FROM" +
       "    res_partner as rp" +
+      "    LEFT JOIN res_ward AS rw ON rp.ward_id = rw.id" +
+      "    LEFT JOIN res_district AS rd ON rp.district_id = rd.id" +
+      "    LEFT JOIN res_province AS rpp ON rp.province_id = rpp.id" +
       " WHERE" +
-      "    id = ?;";
+      "    rp.id = ?;";
     let sale_order =
       "      SELECT" +
       "    name," +
