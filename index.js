@@ -78,14 +78,17 @@ app.route("/admin/users").get(adminCtrl.users);
 // POST - admin user with params {id}
 app.route("/admin/users/detail").post(adminCtrl.usersDetail);
 
-// PUT - admin block user with params {id}
-app.route("/admin/users").put(adminCtrl.changeStatus);
+// PUT - admin change user status with params {user_id}
+app.route("/admin/users/change-status").put(adminCtrl.userChangeStatus);
 
 // GET - admin products
 app.route("/admin/products").get(adminCtrl.products);
 
 // POST - admin products with params {product_id}
 app.route("/admin/products/detail").post(adminCtrl.productsDetail);
+
+// PUT - admin change product status with params {product_id}
+app.route("/admin/product/change-status").put(adminCtrl.productChangeStatus);
 
 // GET - admin purchase order
 app.route("/admin/order/sale").get(adminCtrl.sale);
@@ -105,11 +108,17 @@ app.route("/admin/3pls").get(adminCtrl.thirdParty);
 // POST - admin third party logistic with params {3pls_id}
 app.route("/admin/3pls/detail").post(adminCtrl.thirdPartyDetail);
 
+// PUT - admin change 3pls status with params {3pls_id}
+app.route("/admin/3pls/change-status").put(adminCtrl.thirdPartyChangeStatus);
+
 // GET - admin third party logistic employee
 app.route("/admin/3plse").get(adminCtrl.thirdPartyEmployee);
 
 // POST - admin third party logistic employee with params {employee_id}
 app.route("/admin/3plse/detail").post(adminCtrl.thirdPartyEmployeeDetail);
+
+// PUT - admin change 3pls status with params {3plse_id}
+app.route("/admin/3plse/change-status").put(adminCtrl.thirdPartyEmployeeChangeStatus);
 
 // GET - admin warehouse
 app.route("/admin/warehouse").get(adminCtrl.warehouse);
@@ -117,6 +126,8 @@ app.route("/admin/warehouse").get(adminCtrl.warehouse);
 // POST - admin warehouse with params {warehouse_id}
 app.route("/admin/warehouse/detail").post(adminCtrl.warehouseDetail);
 
+// PUT - admin change warehouse status with params {warehouse_id}
+app.route("/admin/warehouse/change-status").put(adminCtrl.warehouseChangeStatus);
 //////////////////////////////////////////////////////////////////////
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

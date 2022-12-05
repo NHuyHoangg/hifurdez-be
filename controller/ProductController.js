@@ -36,7 +36,8 @@ module.exports = {
       "         FROM product_media" +
       "        WHERE product_index = 2 " +
       "            ) AS media_2" +
-      "    ON product_product.id = media_2.product_id;";
+      "    ON product_product.id = media_2.product_id" +
+      " WHERE product_product.is_active = 1";
 
     pool.query(sql, (err, response) => {
       if (err) throw err;
@@ -64,6 +65,7 @@ module.exports = {
       "     , media_0" +
       "     , media_1" +
       "  FROM product_product_media" +
+      " WHERE is_active = 1" +
       " ORDER BY RAND()" +
       " LIMIT 8;";
     pool.query(sql, (err, response) => {
@@ -81,7 +83,7 @@ module.exports = {
       "     , media_0" +
       "     , media_1" +
       "  FROM product_product_media" +
-      " WHERE collection_id = 1" +
+      " WHERE collection_id = 1 AND is_active = 1" +
       " ORDER BY RAND()" +
       " LIMIT 8;";
     pool.query(sql, (err, response) => {
@@ -99,7 +101,7 @@ module.exports = {
       "     , media_0" +
       "     , media_1" +
       "  FROM product_product_media" +
-      " WHERE collection_id = 2" +
+      " WHERE collection_id = 2 AND is_active = 1" +
       " ORDER BY RAND()" +
       " LIMIT 8;";
     pool.query(sql, (err, response) => {
@@ -117,7 +119,7 @@ module.exports = {
       "     , media_0" +
       "     , media_1" +
       "  FROM product_product_media" +
-      " WHERE collection_id = 3" +
+      " WHERE collection_id = 3 AND is_active = 1" +
       " ORDER BY RAND()" +
       " LIMIT 8;";
     pool.query(sql, (err, response) => {
@@ -135,7 +137,7 @@ module.exports = {
       "     , media_0" +
       "     , media_1" +
       "  FROM product_product_media" +
-      " WHERE collection_id = 4" +
+      " WHERE collection_id = 4 AND is_active = 1" +
       " ORDER BY RAND()" +
       " LIMIT 8;";
     pool.query(sql, (err, response) => {
