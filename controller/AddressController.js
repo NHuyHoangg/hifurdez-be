@@ -32,7 +32,6 @@ module.exports = {
       "     , code" +
       "  FROM res_ward" +
       " WHERE district_id = ?;";
-      console.log(sql);
     pool.query(sql, [req.body.id], (err, response) => {
       if (err) throw err;
       res.json(response);

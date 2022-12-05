@@ -72,6 +72,12 @@ app.route("/province/district").post(address.district);
 app.route("/province/district/ward").post(address.ward);
 
 // ADMIN
+// GET - admin user
+app.route("/admin/users").get(adminCtrl.users);
+
+// POST - admin user with params {product_id}
+app.route("/admin/users/detail").post(adminCtrl.usersDetail);
+
 // GET - admin products
 app.route("/admin/products").get(adminCtrl.products);
 

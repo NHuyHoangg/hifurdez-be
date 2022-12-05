@@ -52,6 +52,7 @@ module.exports = {
       " WHERE id = ?";
     pool.query(sql, [data], (err, response) => {
       if (err) throw err;
+
       res.json(response);
     });
   },
