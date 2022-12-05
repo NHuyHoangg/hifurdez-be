@@ -65,7 +65,9 @@ module.exports = {
       "    display_name," +
       "    is_active" +
       " FROM" +
-      " res_partner;";
+      " res_partner " +
+      " WHERE" +
+      " is_supplier =  0;";
     pool.query(sql, (err, response) => {
       if (err) throw err;
       res.json(response);
@@ -131,6 +133,19 @@ module.exports = {
       if (err) throw err;
       customer_info["so"] = response;
       res.json(customer_info);
+    });
+  },
+  changeStatus: (req, res) => {
+    let sql =
+      "UPDATE" +
+      "    res_partner" +
+      " SET" +
+      "    is_active = CASE WHEN is_active = 0 THEN 1 ELSE 0 END" +
+      " WHERE" +
+      "    id = ?;";
+    pool.query(sql, [req.body.id], (err, response) => {
+      if (err) throw err;
+      res.json({ message: "Update success!" });
     });
   },
   products: (req, res) => {

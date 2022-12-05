@@ -75,8 +75,12 @@ app.route("/province/district/ward").post(address.ward);
 // GET - admin user
 app.route("/admin/users").get(adminCtrl.users);
 
-// POST - admin user with params {product_id}
+// POST - admin user with params {id}
 app.route("/admin/users/detail").post(adminCtrl.usersDetail);
+
+// PUT - admin block user with params {id}
+app.route("/admin/users").put(adminCtrl.changeStatus);
+
 
 // GET - admin products
 app.route("/admin/products").get(adminCtrl.products);
