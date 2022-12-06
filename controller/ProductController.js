@@ -45,6 +45,7 @@ module.exports = {
       res.json(response);
     });
   },
+
   detail: (req, res) => {
     let data = req.body.id;
     let sql = 
@@ -56,6 +57,7 @@ module.exports = {
       res.json(response);
     });
   },
+  
   random: (req, res) => {
     let sql =
       "SELECT id" +
