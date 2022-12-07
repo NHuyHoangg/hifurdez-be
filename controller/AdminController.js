@@ -131,7 +131,10 @@ module.exports = {
       " WHERE id = ?;";   
     pool.query(pd, [req.body.id], (err, response) => {
       if (err) throw err;
-      res.json({ message: "Update success!" });
+      pool.query(pdm, [req.body.id], (err1, response1) => {
+        if (err1) throw err1;
+        res.json({ message: "Update success!" });
+      });
     });
   },
 
@@ -168,7 +171,7 @@ module.exports = {
     let sql =
       "SELECT sale.id AS order_id" +
       "     , sale.name AS code" +
-      "     , rp.name AS supplier_name" +
+      "     , rp.name AS customer_name" +
       "     , DATE_FORMAT(order_date, '%Y/%m/%d') AS order_date" +
       "     , DATE_FORMAT(commitment_date, '%Y/%m/%d') AS delivery_date" +
       "     , product_amount" +

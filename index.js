@@ -2,8 +2,11 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const productsCtrl = require("./controller/ProductController");
-const address = require("./controller/AddressController");
+const addressCtrl = require("./controller/AddressController");
 const adminCtrl = require("./controller/AdminController");
+const authCtrl = require("./controller/AuthController");
+const userCtrl = require("./controller/UserController");
+const otherCtrl = require("./controller/OtherController");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -42,9 +45,11 @@ app.get("/", (req, res) => {
 });
 
 // API ROUTE
-// AUTH - POST
-app.use("/server/auth", require("./controller/AuthController"));
+// ---------------------------- AUTH - POST ---------------------------------- //
+app.route("/auth/sign-in").post(authCtrl.signIn);
+app.route("/auth/sign-up").post(authCtrl.signUp);
 
+// ------------------------------ PRODUCT ------------------------------------ //
 // COLLECTION - GET - 8 random products by collection.
 app.route("/product-random-by-spring").get(productsCtrl.randomBySpring);
 app.route("/product-random-by-summer").get(productsCtrl.randomBySummer);
@@ -54,24 +59,23 @@ app.route("/product-random-by-winter").get(productsCtrl.randomByWinter);
 // ALL PRODUCT - GET - all product.
 app.route("/all-product").get(productsCtrl.get);
 
-// PRODUCT DETAIL
 // GET - 8 random products
 app.route("/product-random").get(productsCtrl.random);
 
 // POST - product detail with params {id}.
 app.route("/product-by-id").post(productsCtrl.detail);
 
-// ADDRESS
+// ------------------------------ ADDRESS ------------------------------------- //
 // GET - all province
-app.route("/province").get(address.province);
+app.route("/province").get(addressCtrl.province);
 
 // POST - all district with params {province_id}.
-app.route("/province/district").post(address.district);
+app.route("/province/district").post(addressCtrl.district);
 
 // POST - all district with params {district_id}.
-app.route("/province/district/ward").post(address.ward);
+app.route("/province/district/ward").post(addressCtrl.ward);
 
-// ADMIN
+// -------------------------------- ADMIN -------------------------------------- //
 // GET - admin user
 app.route("/admin/users").get(adminCtrl.users);
 
@@ -90,10 +94,10 @@ app.route("/admin/products/detail").post(adminCtrl.productsDetail);
 // PUT - admin change product status with params {product_id}
 app.route("/admin/product/change-status").put(adminCtrl.productChangeStatus);
 
-// GET - admin purchase order
+// GET - admin sale order
 app.route("/admin/order/sale").get(adminCtrl.sale);
 
-// POST - admin purchase order with params {po_id}
+// POST - admin sale order with params {so_id}
 app.route("/admin/order/sale/detail").post(adminCtrl.saleDetail);
 
 // GET - admin purchase order
@@ -128,6 +132,27 @@ app.route("/admin/warehouse/detail").post(adminCtrl.warehouseDetail);
 
 // PUT - admin change warehouse status with params {warehouse_id}
 app.route("/admin/warehouse/change-status").put(adminCtrl.warehouseChangeStatus);
+
+// -------------------------------- USER -------------------------------------- //
+// POST - user get user's info with params {user_id} 
+app.route("/user/get-info").post(userCtrl.getInfo);
+
+// POST - user change info with params {fullname, username, email, password, phone, street, ward_id, district_id, province_id}
+app.route("/user/change-info").post(userCtrl.changeInfo);
+
+// PUT - user change image with params {id, image}
+app.route("/user/change-image").put(userCtrl.changeImage);
+
+// POST - admin sale order with params {id}
+app.route("/user/order").post(userCtrl.userSale);
+
+// POST - admin sale order with params {po_id}
+app.route("/user/order/detail").post(userCtrl.userSaleDetail);
+
+// -------------------------------- OTHERS -------------------------------------- //
+// POST - search in navbar with params {stringName}
+app.route("/search").get(otherCtrl.navBarSearch);
+
 //////////////////////////////////////////////////////////////////////
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
