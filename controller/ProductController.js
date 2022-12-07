@@ -64,8 +64,14 @@ module.exports = {
       "     , product_name" +
       "     , price" +
       "     , discount_price" +
-      "     , media_0" +
-      "     , media_1" +
+      "     , CASE " +
+      "         WHEN UPPER(media_0) LIKE '%-DIM%' THEN 'https://res.cloudinary.com/castlery/image/private/b_rgb:f0eae2,c_fit,f_auto,q_auto,w_1000/v1624969337/crusader/variants/50440634-PL4001/Hans-3-Seater-Sofa-Light-Grey-Revamped-Lifestyle-Crop.jpg' " +
+      "         ELSE media_0 " +
+      "       END AS media_0 " +
+      "     , CASE " +
+      "         WHEN UPPER(media_1) LIKE '%-DIM%' THEN 'https://res.cloudinary.com/castlery/image/private/b_rgb:f0eae2,c_fit,f_auto,q_auto,w_1000/v1624969337/crusader/variants/50440634-PL4001/Hans-3-Seater-Sofa-Light-Grey-Revamped-Lifestyle-Crop.jpg' " +
+      "         ELSE media_1 " +
+      "       END AS media_1 " +
       "  FROM product_product_media" +
       " WHERE is_active = 1" +
       " ORDER BY RAND()" +
@@ -82,8 +88,14 @@ module.exports = {
       "     , product_name" +
       "     , price" +
       "     , discount_price" +
-      "     , media_0" +
-      "     , media_1" +
+      "     , CASE " +
+      "         WHEN UPPER(media_0) LIKE '%-DIM%' THEN 'https://res.cloudinary.com/castlery/image/private/b_rgb:f0eae2,c_fit,f_auto,q_auto,w_1000/v1624969337/crusader/variants/50440634-PL4001/Hans-3-Seater-Sofa-Light-Grey-Revamped-Lifestyle-Crop.jpg' " +
+      "         ELSE media_0 " +
+      "       END AS media_0 " +
+      "     , CASE " +
+      "         WHEN UPPER(media_1) LIKE '%-DIM%' THEN 'https://res.cloudinary.com/castlery/image/private/b_rgb:f0eae2,c_fit,f_auto,q_auto,w_1000/v1624969337/crusader/variants/50440634-PL4001/Hans-3-Seater-Sofa-Light-Grey-Revamped-Lifestyle-Crop.jpg' " +
+      "         ELSE media_1 " +
+      "       END AS media_1 " +
       "  FROM product_product_media" +
       " WHERE collection_id = 1 AND is_active = 1" +
       " ORDER BY RAND()" +
@@ -100,8 +112,14 @@ module.exports = {
       "     , product_name" +
       "     , price" +
       "     , discount_price" +
-      "     , media_0" +
-      "     , media_1" +
+      "     , CASE " +
+      "         WHEN UPPER(media_0) LIKE '%-DIM%' THEN 'https://res.cloudinary.com/castlery/image/private/b_rgb:f0eae2,c_fit,f_auto,q_auto,w_1000/v1624969337/crusader/variants/50440634-PL4001/Hans-3-Seater-Sofa-Light-Grey-Revamped-Lifestyle-Crop.jpg' " +
+      "         ELSE media_0 " +
+      "       END AS media_0 " +
+      "     , CASE " +
+      "         WHEN UPPER(media_1) LIKE '%-DIM%' THEN 'https://res.cloudinary.com/castlery/image/private/b_rgb:f0eae2,c_fit,f_auto,q_auto,w_1000/v1624969337/crusader/variants/50440634-PL4001/Hans-3-Seater-Sofa-Light-Grey-Revamped-Lifestyle-Crop.jpg' " +
+      "         ELSE media_1 " +
+      "       END AS media_1 " +
       "  FROM product_product_media" +
       " WHERE collection_id = 2 AND is_active = 1" +
       " ORDER BY RAND()" +
@@ -118,8 +136,14 @@ module.exports = {
       "     , product_name" +
       "     , price" +
       "     , discount_price" +
-      "     , media_0" +
-      "     , media_1" +
+      "     , CASE " +
+      "         WHEN UPPER(media_0) LIKE '%-DIM%' THEN 'https://res.cloudinary.com/castlery/image/private/b_rgb:f0eae2,c_fit,f_auto,q_auto,w_1000/v1624969337/crusader/variants/50440634-PL4001/Hans-3-Seater-Sofa-Light-Grey-Revamped-Lifestyle-Crop.jpg' " +
+      "         ELSE media_0 " +
+      "       END AS media_0 " +
+      "     , CASE " +
+      "         WHEN UPPER(media_1) LIKE '%-DIM%' THEN 'https://res.cloudinary.com/castlery/image/private/b_rgb:f0eae2,c_fit,f_auto,q_auto,w_1000/v1624969337/crusader/variants/50440634-PL4001/Hans-3-Seater-Sofa-Light-Grey-Revamped-Lifestyle-Crop.jpg' " +
+      "         ELSE media_1 " +
+      "       END AS media_1 " +
       "  FROM product_product_media" +
       " WHERE collection_id = 3 AND is_active = 1" +
       " ORDER BY RAND()" +
@@ -136,8 +160,14 @@ module.exports = {
       "     , product_name" +
       "     , price" +
       "     , discount_price" +
-      "     , media_0" +
-      "     , media_1" +
+      "     , CASE " +
+      "         WHEN UPPER(media_0) LIKE '%-DIM%' THEN 'https://res.cloudinary.com/castlery/image/private/b_rgb:f0eae2,c_fit,f_auto,q_auto,w_1000/v1624969337/crusader/variants/50440634-PL4001/Hans-3-Seater-Sofa-Light-Grey-Revamped-Lifestyle-Crop.jpg' " +
+      "         ELSE media_0 " +
+      "       END AS media_0 " +
+      "     , CASE " +
+      "         WHEN UPPER(media_1) LIKE '%-DIM%' THEN 'https://res.cloudinary.com/castlery/image/private/b_rgb:f0eae2,c_fit,f_auto,q_auto,w_1000/v1624969337/crusader/variants/50440634-PL4001/Hans-3-Seater-Sofa-Light-Grey-Revamped-Lifestyle-Crop.jpg' " +
+      "         ELSE media_1 " +
+      "       END AS media_1 " +
       "  FROM product_product_media" +
       " WHERE collection_id = 4 AND is_active = 1" +
       " ORDER BY RAND()" +

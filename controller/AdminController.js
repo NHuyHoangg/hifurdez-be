@@ -44,7 +44,7 @@ module.exports = {
     let sale_order =
       "SELECT name" +
       "     , tc.code AS transport_card_code" +
-      "     , commitment_date" +
+      "     , DATE_FORMAT(commitment_date, '%Y/%m/%d') AS commitment_date" +
       "     , amount_total" +
       "     , sale.status" +
       "  FROM sale_order AS sale" +
@@ -53,7 +53,7 @@ module.exports = {
       " WHERE customer_id = ?;";
     
     let total_price =
-      "SELECT SUM(amount_total)" +
+      "SELECT SUM(amount_total) AS amount_total" +
       "  FROM sale_order" +
       " WHERE customer_id = ?;";
 
