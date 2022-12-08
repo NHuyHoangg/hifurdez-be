@@ -137,8 +137,8 @@ app.route("/admin/warehouse/change-status").put(adminCtrl.warehouseChangeStatus)
 // POST - user get user's info with params {user_id} 
 app.route("/user/get-info").post(userCtrl.getInfo);
 
-// POST - user change info with params {fullname, username, email, password, phone, street, ward_id, district_id, province_id}
-app.route("/user/change-info").post(userCtrl.changeInfo);
+// PUT - user change info with params {fullname, username, email, password, phone, street, ward_id, district_id, province_id}
+app.route("/user/change-info").put(userCtrl.changeInfo);
 
 // PUT - user change image with params {id, image}
 app.route("/user/change-image").put(userCtrl.changeImage);
@@ -151,7 +151,7 @@ app.route("/user/order/detail").post(userCtrl.userSaleDetail);
 
 // -------------------------------- OTHERS -------------------------------------- //
 // POST - search in navbar with params {stringName}
-app.route("/search").get(otherCtrl.navBarSearch);
+app.route("/search").post(otherCtrl.navBarSearch);
 
 //////////////////////////////////////////////////////////////////////
 const port = process.env.PORT || 3000;

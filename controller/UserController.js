@@ -4,25 +4,25 @@ const { pool } = require("../database/dbinfo");
 module.exports = {
   getInfo: (req, res) => {
     let id = req.body.id;
-    let info = 
-    "SELECT user.name " +
-    "     , user.phone" +
-    "     , user.street" +
-    "     , user.user_mail" +
-    "     , user.display_name AS user_name" +
-    "     , rw.name AS ward" +
-    "     , rd.name AS district" +
-    "     , rp.name AS province" +
-    "  FROM res_partner AS user" +
-    "  LEFT JOIN res_ward AS rw" +
-    "    ON customer.ward_id = rw.id" +
-    "  LEFT JOIN res_district AS rd" +
-    "    ON customer.district_id = rd.id" +
-    "  LEFT JOIN res_province AS rp" +
-    "    ON customer.province_id = rp.id" +
-    " WHERE user.id = ?;";
+    let info =
+      "SELECT user.name " +
+      "     , user.phone" +
+      "     , user.street" +
+      "     , user.user_mail" +
+      "     , user.display_name AS user_name" +
+      "     , rw.name AS ward" +
+      "     , rd.name AS district" +
+      "     , rp.name AS province" +
+      "  FROM res_partner AS user" +
+      "  LEFT JOIN res_ward AS rw" +
+      "    ON customer.ward_id = rw.id" +
+      "  LEFT JOIN res_district AS rd" +
+      "    ON customer.district_id = rd.id" +
+      "  LEFT JOIN res_province AS rp" +
+      "    ON customer.province_id = rp.id" +
+      " WHERE user.id = ?;";
 
-    pool.query(info, [id] , (err, response) => {
+    pool.query(info, [id], (err, response) => {
       if (err) throw err;
       res.json(response);
     });
@@ -39,12 +39,9 @@ module.exports = {
     let district = req.body.district;
     let province = req.body.province;
 
-    let sql = 
-      "SELECT id " +
-      "  FROM res_partner " +
-      " WHERE user_mail = ?;";
+    let sql = "SELECT id " + "  FROM res_partner " + " WHERE user_mail = ?;";
 
-    let updateUser = 
+    let updateUser =
       "UPDATE res_partner " +
       "   SET name = ? " +
       "     , phone = ? " +
@@ -57,26 +54,39 @@ module.exports = {
       "     , province_id = ? " +
       " WHERE id = ?;";
 
-    pool.query(sql, [email] , (err, response) => {
+    pool.query(sql, [email], (err, response) => {
       if (err) throw err;
-      pool.query(updateUser, [fullname, phone, street, email, username, password, ward, district, province, response[0].id] , (err1, response1) => {
-        if (err1) throw err1;
-        res.json(response1);
-      });
+      pool.query(
+        updateUser,
+        [
+          fullname,
+          phone,
+          street,
+          email,
+          username,
+          password,
+          ward,
+          district,
+          province,
+          response[0].id,
+        ],
+        (err1, response1) => {
+          if (err1) throw err1;
+          res.json(response1);
+        }
+      );
     });
   },
 
   changeImage: (req, res) => {
     let id = req.body.id;
     let image = req.body.image;
-    let updateUser = 
-      "UPDATE res_partner " +
-      "   SET image = ? " +
-      " WHERE id = ?;";
+    let updateUser =
+      "UPDATE res_partner " + "   SET image = ? " + " WHERE id = ?;";
 
-    pool.query(updateUser, [image, id] , (err, response) => {
+    pool.query(updateUser, [image, id], (err, response) => {
       if (err) throw err;
-      res.json({ message: "Update successful"});
+      res.json({ message: "Update successful" });
     });
   },
 
@@ -145,11 +155,9 @@ module.exports = {
       "  LEFT JOIN product_product AS pd" +
       "    ON sale_order_line.product_id = pd.id" +
       " WHERE so_id = ?;";
-    
+
     let totalPrice =
-      "SELECT amount_total" +
-      "  FROM sale_order" +
-      " WHERE id = ?;";
+      "SELECT amount_total" + "  FROM sale_order" + " WHERE id = ?;";
 
     pool.query(saleInfo, [id], (err, response) => {
       if (err) throw err;
@@ -167,6 +175,4 @@ module.exports = {
       });
     });
   },
-
-
 };
