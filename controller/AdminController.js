@@ -6,6 +6,7 @@ module.exports = {
     let sql =
       "SELECT DATE_FORMAT(create_date, '%Y/%m/%d') as created_date" +
       "     , DATE_FORMAT(last_active, '%Y/%m/%d') as last_active" +
+      "     , id" +
       "     , name" +
       "     , user_mail" +
       "     , display_name" +
@@ -51,7 +52,7 @@ module.exports = {
       "  LEFT JOIN transport_card AS tc" +
       "    ON sale.id = tc.sale_order_id" +
       " WHERE customer_id = ?;";
-    
+
     let total_price =
       "SELECT SUM(amount_total) AS amount_total" +
       "  FROM sale_order" +
@@ -72,7 +73,6 @@ module.exports = {
         });
       });
     });
-    
   },
 
   userChangeStatus: (req, res) => {
@@ -83,7 +83,7 @@ module.exports = {
       "             WHEN is_active = 0 THEN 1" +
       "             ELSE 0" +
       "       END)" +
-      " WHERE id = ?;";   
+      " WHERE id = ?;";
     pool.query(sql, [req.body.id], (err, response) => {
       if (err) throw err;
       res.json({ message: "Update success!" });
@@ -119,7 +119,7 @@ module.exports = {
       "             WHEN is_active = 0 THEN 1" +
       "             ELSE 0" +
       "       END)" +
-      " WHERE id = ?;";   
+      " WHERE id = ?;";
 
     let pdm =
       "UPDATE product_product_media" +
@@ -128,7 +128,7 @@ module.exports = {
       "             WHEN is_active = 0 THEN 1" +
       "             ELSE 0" +
       "       END)" +
-      " WHERE id = ?;";   
+      " WHERE id = ?;";
     pool.query(pd, [req.body.id], (err, response) => {
       if (err) throw err;
       pool.query(pdm, [req.body.id], (err1, response1) => {
@@ -231,11 +231,9 @@ module.exports = {
       "  LEFT JOIN product_product AS pd" +
       "    ON sale_order_line.product_id = pd.id" +
       " WHERE so_id = ?;";
-    
+
     let totalPrice =
-      "SELECT amount_total" +
-      "  FROM sale_order" +
-      " WHERE id = ?;";
+      "SELECT amount_total" + "  FROM sale_order" + " WHERE id = ?;";
 
     pool.query(saleInfo, [id], (err, response) => {
       if (err) throw err;
@@ -298,7 +296,7 @@ module.exports = {
       "    ON purchase.id = sm.po_id" +
       " WHERE purchase.id = ?" +
       " LIMIT 1;";
-    
+
     let purchaseOrderLine =
       "SELECT name" +
       "     , price_unit AS price" +
@@ -308,14 +306,12 @@ module.exports = {
       " WHERE po_id = ?;";
 
     let totalPrice =
-      "SELECT amount_total" +
-      "  FROM purchaser_order" +
-      " WHERE id = ?;";
+      "SELECT amount_total" + "  FROM purchaser_order" + " WHERE id = ?;";
 
     pool.query(purchaseInfo, [id, id], (err, response) => {
       if (err) throw err;
       result["purchase_order"] = response;
-      
+
       pool.query(purchaseOrderLine, [id], (err2, response2) => {
         if (err2) throw err2;
         result["purchase_order_line"] = response2;
@@ -353,9 +349,9 @@ module.exports = {
       "             WHEN is_active = 0 THEN 1" +
       "             ELSE 0" +
       "       END)" +
-      " WHERE id = ?;";   
+      " WHERE id = ?;";
 
-    let setAllUserStatus = 
+    let setAllUserStatus =
       "UPDATE third_party_employee" +
       "   SET is_active =" +
       "       (CASE " +
@@ -365,16 +361,20 @@ module.exports = {
       "               WHERE id = ?) = 0 THEN 1" +
       "             ELSE 0" +
       "       END)" +
-      " WHERE third_party_id = ?;"; 
-    
-    pool.query(setAllUserStatus, [req.body.id, req.body.id], (err2, response2) => {
-      if (err2) throw err2;
+      " WHERE third_party_id = ?;";
 
-      pool.query(sql, [req.body.id], (err3, response3) => {
-        if (err3) throw err3;
-        res.json({ message: "Update success!" });
-      });
-    });
+    pool.query(
+      setAllUserStatus,
+      [req.body.id, req.body.id],
+      (err2, response2) => {
+        if (err2) throw err2;
+
+        pool.query(sql, [req.body.id], (err3, response3) => {
+          if (err3) throw err3;
+          res.json({ message: "Update success!" });
+        });
+      }
+    );
   },
 
   thirdPartyDetail: (req, res) => {
@@ -438,7 +438,7 @@ module.exports = {
       "             WHEN is_active = 0 THEN 1" +
       "             ELSE 0" +
       "       END)" +
-      " WHERE id = ?;";   
+      " WHERE id = ?;";
     pool.query(sql, [req.body.id], (err, response) => {
       if (err) throw err;
       res.json({ message: "Update success!" });
@@ -471,7 +471,7 @@ module.exports = {
       "  LEFT JOIN sale_order AS so" +
       "    ON so.id = tc.sale_order_id" +
       " WHERE tc.third_party_employee_id = ?;";
-      
+
     pool.query(thirdPartyEmployeeInfo, [id], (err, response) => {
       if (err) throw err;
       result["thirdPartyEmployeeInfo"] = response;
@@ -516,7 +516,7 @@ module.exports = {
       "             WHEN is_active = 0 THEN 1" +
       "             ELSE 0" +
       "       END)" +
-      " WHERE id = ?;";   
+      " WHERE id = ?;";
     pool.query(sql, [req.body.id], (err, response) => {
       if (err) throw err;
       res.json({ message: "Update success!" });
@@ -564,7 +564,7 @@ module.exports = {
       "  LEFT JOIN purchaser_order AS po" +
       "    ON sm.po_id = po.id" +
       " WHERE x.warehouse_id IS NULL AND x.dest_warehouse_id = ? ";
-    
+
     let transfer =
       "SELECT x.picking_code AS transfer_code" +
       "     , DATE_FORMAT(x.date, '%Y/%m/%d') AS date" +
