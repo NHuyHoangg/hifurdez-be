@@ -45,7 +45,9 @@ module.exports = {
     let sale_order =
       "SELECT name" +
       "     , tc.code AS transport_card_code" +
+      "     , DATE_FORMAT(order_date, '%Y/%m/%d') AS order_date" +
       "     , DATE_FORMAT(commitment_date, '%Y/%m/%d') AS commitment_date" +
+      "     , product_amount" +
       "     , amount_total" +
       "     , sale.status" +
       "  FROM sale_order AS sale" +
@@ -65,7 +67,7 @@ module.exports = {
       pool.query(sale_order, [id], (err2, response2) => {
         if (err2) throw err2;
         customer_info["so"] = response2;
-
+        customer_info["number_of_so"] = response2.length;
         pool.query(total_price, [id], (err3, response3) => {
           if (err3) throw err3;
           customer_info["total_price"] = response3;
