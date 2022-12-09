@@ -171,13 +171,13 @@ module.exports = {
 
   addNewProduct: (req, res) => {
     let category_id = req.body.category_id;
-    let sku = req.body.sku;
     let collection_id = req.body.collection_id;
     let product_name = req.body.product_name;
     let material = req.body.material;
     let weight = req.body.weight;
     let description = req.body.description;
     let price = req.body.price;
+    let discount_price = req.body.discount_price;
     let width = req.body.width;
     let depth = req.body.depth;
     let height = req.body.height;
@@ -197,54 +197,75 @@ module.exports = {
     let media_12 = req.body.media_12;
     let media_13 = req.body.media_13;
     let media_14 = req.body.media_14;
-    var result = [
+    let result = [
       media_0, media_1, media_2, media_3, media_4, 
       media_5, media_6, media_7, media_8, media_9, 
-      media_10, media_11, media_12, media_13
+      media_10, media_11, media_12, media_13, media_14
     ];
-
-    var count = 0;
-    for (var i in 14) {
-      // if (media_${i} != "") {
-      //   console.log('hihi');
-      // }
+    
+    let resultImport = [];
+  
+    for (let i = 0; i < result.length; i++) {
+      if (result[i]) {
+        resultImport.push(result[i]);
+      }
     }
+
     let lengthOfProduct = 
       "SELECT id" +
-      "  FROM product_product_media;";
+      "  FROM product_product_media" +
+      " ORDER BY id DESC "+
+      " LIMIT 1 ;";
+
+    let lengthOfProductImage = 
+      "SELECT id" +
+      "  FROM product_media" +
+      " ORDER BY id DESC "+
+      " LIMIT 1 ;";
 
     let insertProductProductMedia =
       "INSERT INTO product_product_media (id, sku, category_id, collection_id " +
-      "       , name, material, weight, description, price, discount_price " +
+      "       , product_name, material, weight, description, price, discount_price " +
       "       , width, depth,	height,	color, media_0, media_1, media_2, media_3, media_4, media_5" +		
       "       , media_6, media_7, media_8, media_9, media_10, media_11, media_12, media_13, media_14" +			
       "       ) " +			
-      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ); ";
+      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ); ";
 
     let insertProductProduct =
-      "INSERT INTO product_product_media (id, sku, category_id, collection_id " +
+      "INSERT INTO product_product (id, sku, category_id, collection_id " +
       "       , name, material, weight, description, price, discount_price " +
       "       , width, depth,	height,	color" +		
       "       ) " +			
       "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); ";
     
     let insertProductMedia =
-      "INSERT INTO product_product_media (id, sku, category_id, collection_id " +
-      "       , name, material, weight, description, price, discount_price " +
-      "       , width, depth,	height,	color" +		
-      "       ) " +			
-      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); ";
+      "INSERT INTO product_media (id, content, product_id, product_index) " +
+      "VALUES (?, ?, ?, ?); ";
+
     pool.query(lengthOfProduct, (err, response) => {
       if (err) throw err;
       pool.query(insertProductProductMedia, [
-          response[0].id + 1, "PP" + String(Number(response[0].id) + 1), category_id
-        , sku, collection_id, product_name, material, weight, description
-        , price, price, width, depth, height, color, media_0
-        , media_1, media_2, media_3, media_4, media_5, media_6, media_7
-        , media_8, media_9, media_10, media_11, media_12, media_13, media_14
-      ], (err1, response1) => {
+        response[0].id + 1, "PP900" + String(Number(response[0].id) + 1), category_id
+          , collection_id, product_name, material, weight, description
+          , price, discount_price, width, depth, height, color, media_0
+          , media_1, media_2, media_3, media_4, media_5, media_6, media_7
+          , media_8, media_9, media_10, media_11, media_12, media_13, media_14], (err1, response1) => {
         if (err1) throw err1;
-        res.json({ message: "Add success!" });
+        pool.query(insertProductProduct, [
+          response[0].id + 1, "PP900" + String(Number(response[0].id) + 1), category_id
+            , collection_id, product_name, material, weight, description
+            , price, discount_price, width, depth, height, color], (err2, response2) => {
+          if (err2) throw err2;
+          pool.query(lengthOfProductImage, (err3, response3) => {
+            if (err3) throw err3;
+            for (let i = 0; i < resultImport.length; i++) {
+              pool.query(insertProductMedia, [response3[0].id + 1 + Number(i), resultImport[i], response[0].id + 1, i+1 ], (err4, response4) => {
+                if (err4) throw err4;
+              });
+            }
+            res.json({ message: "Add success!" });
+          });
+        });
       });
     });
   },
@@ -259,6 +280,9 @@ module.exports = {
     let height = req.body.height;
     let weight = req.body.weight;
     let description = req.body.description;
+    let price = req.body.price;
+    let discount_price = req.body.discount_price;
+    let material = req.body.material;
     let update_name =
       "UPDATE product_product" +
       "   SET name =" +
@@ -269,7 +293,7 @@ module.exports = {
 
     let update_collection =
       "UPDATE product_product" +
-      "   SET collection =" +
+      "   SET collection_id =" +
       "       (CASE " +
       "             WHEN ? != '' THEN ?" +
       "       END)" +
@@ -323,6 +347,30 @@ module.exports = {
       "       END)" +
       " WHERE id = ?;";
       
+    let update_price =
+      "UPDATE product_product" +
+      "   SET price =" +
+      "       (CASE " +
+      "             WHEN ? != '' THEN ?" +
+      "       END)" +
+      " WHERE id = ?;";
+
+    let update_discount_price =
+      "UPDATE product_product" +
+      "   SET discount_price =" +
+      "       (CASE " +
+      "             WHEN ? != '' THEN ?" +
+      "       END)" +
+      " WHERE id = ?;";
+
+    let update_material =
+      "UPDATE product_product" +
+      "   SET material =" +
+      "       (CASE " +
+      "             WHEN ? != '' THEN ?" +
+      "       END)" +
+      " WHERE id = ?;";
+      
     pool.query(update_name, [name, name , id], (err, response) => {
       if (err) throw err;
       pool.query(update_collection, [collection, collection, id], (err1, response1) => {
@@ -339,7 +387,16 @@ module.exports = {
                   if (err6) throw err6;
                   pool.query(update_description, [description, description, id], (err7, response7) => {
                     if (err7) throw err7;
-                    res.json({ message: "Update success!" });
+                    pool.query(update_price, [price, price, id], (err8, response8) => {
+                      if (err8) throw err8;
+                      pool.query(update_discount_price, [discount_price, discount_price, id], (err9, response9) => {
+                        if (err9) throw err9;
+                        pool.query(update_material, [material, material, id], (err10, response10) => {
+                          if (err10) throw err10;
+                          res.json({ message: "Update success!" });
+                        });
+                      });
+                    });
                   });
                 });
               });
