@@ -92,7 +92,7 @@ app.route("/admin/products").get(adminCtrl.products);
 app.route("/admin/products/detail").post(adminCtrl.productsDetail);
 
 // PUT - admin change product status with params {product_id}
-app.route("/admin/product/change-status").put(adminCtrl.productChangeStatus);
+app.route("/admin/products/change-status").put(adminCtrl.productChangeStatus);
 
 // GET - admin sale order
 app.route("/admin/order/sale").get(adminCtrl.sale);
