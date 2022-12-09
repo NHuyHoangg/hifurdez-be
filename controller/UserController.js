@@ -5,7 +5,8 @@ module.exports = {
   getInfo: (req, res) => {
     let id = req.body.id;
     let info =
-      "SELECT user.name " +
+      "SELECT user.id " +
+      "     , user.name " +
       "     , user.phone" +
       "     , user.street" +
       "     , user.user_mail" +
@@ -23,6 +24,24 @@ module.exports = {
       " WHERE user.id = ?;";
 
     pool.query(info, [id], (err, response) => {
+      if (err) throw err;
+      res.json(response);
+    });
+  },
+
+  confirmUserPassword: (req, res) => {
+    let id = req.body.id;
+    let password = req.body.password;
+    let check =
+      "SELECT " +
+      "       CASE" +
+      "             WHEN user.password = SHA1(?) THEN 1" +
+      "             ELSE 0" +
+      "       END" +
+      "  FROM res_partner AS user" +
+      " WHERE user.id = ?;";
+
+    pool.query(check, [password, id], (err, response) => {
       if (err) throw err;
       res.json(response);
     });
@@ -78,17 +97,17 @@ module.exports = {
     });
   },
 
-  changeImage: (req, res) => {
-    let id = req.body.id;
-    let image = req.body.image;
-    let updateUser =
-      "UPDATE res_partner " + "   SET image = ? " + " WHERE id = ?;";
+  // changeImage: (req, res) => {
+  //   let id = req.body.id;
+  //   let image = req.body.image;
+  //   let updateUser =
+  //     "UPDATE res_partner " + "   SET image = ? " + " WHERE id = ?;";
 
-    pool.query(updateUser, [image, id], (err, response) => {
-      if (err) throw err;
-      res.json({ message: "Update successful" });
-    });
-  },
+  //   pool.query(updateUser, [image, id], (err, response) => {
+  //     if (err) throw err;
+  //     res.json({ message: "Update successful" });
+  //   });
+  // },
 
   userSale: (req, res) => {
     let id = req.body.id;
