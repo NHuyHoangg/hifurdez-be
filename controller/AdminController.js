@@ -169,6 +169,60 @@ module.exports = {
     });
   },
 
+  addNewProduct: (req, res) => {
+    let pd =
+      "UPDATE product_product" +
+      "   SET is_active =" +
+      "       (CASE " +
+      "             WHEN is_active = 0 THEN 1" +
+      "             ELSE 0" +
+      "       END)" +
+      " WHERE id = ?;";
+
+    let pdm =
+      "UPDATE product_product_media" +
+      "   SET is_active =" +
+      "       (CASE " +
+      "             WHEN is_active = 0 THEN 1" +
+      "             ELSE 0" +
+      "       END)" +
+      " WHERE id = ?;";
+    pool.query(pd, [req.body.id], (err, response) => {
+      if (err) throw err;
+      pool.query(pdm, [req.body.id], (err1, response1) => {
+        if (err1) throw err1;
+        res.json({ message: "Update success!" });
+      });
+    });
+  },
+
+  updateProduct: (req, res) => {
+    let id = req.body.id;
+    let name = req.body.name;
+    let collection = req.body.collection;
+    let color = req.body.color;
+    let width = req.body.width;
+    let length = req.body.length;
+    let height = req.body.height;
+    let description = req.body.description;
+    let pd =
+      "UPDATE product_product" +
+      "   SET is_active =" +
+      "       (CASE " +
+      "             WHEN is_active = 0 THEN 1" +
+      "             ELSE 0" +
+      "       END)" +
+      " WHERE id = ?;";
+
+    pool.query(pd, [req.body.id], (err, response) => {
+      if (err) throw err;
+      pool.query(pdm, [req.body.id], (err1, response1) => {
+        if (err1) throw err1;
+        res.json({ message: "Update success!" });
+      });
+    });
+  },
+
   sale: (req, res) => {
     let sql =
       "SELECT sale.id AS order_id" +
