@@ -37,7 +37,7 @@ module.exports = {
       "       CASE" +
       "             WHEN user.password = SHA1(?) THEN 1" +
       "             ELSE 0" +
-      "       END" +
+      "       END AS is_right" +
       "  FROM res_partner AS user" +
       " WHERE user.id = ?;";
 
