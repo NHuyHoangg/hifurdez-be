@@ -137,11 +137,14 @@ app.route("/admin/warehouse/change-status").put(adminCtrl.warehouseChangeStatus)
 // POST - user get user's info with params {user_id} 
 app.route("/user/get-info").post(userCtrl.getInfo);
 
+// POST - user confirm user's password with params {user_id, password} 
+app.route("/user/confirm-password").post(userCtrl.confirmUserPassword);
+
 // PUT - user change info with params {fullname, username, email, password, phone, street, ward_id, district_id, province_id}
 app.route("/user/change-info").put(userCtrl.changeInfo);
 
 // PUT - user change image with params {id, image}
-app.route("/user/change-image").put(userCtrl.changeImage);
+// app.route("/user/change-image").put(userCtrl.changeImage);
 
 // POST - admin sale order with params {id}
 app.route("/user/order").post(userCtrl.userSale);
