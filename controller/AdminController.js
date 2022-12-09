@@ -170,28 +170,81 @@ module.exports = {
   },
 
   addNewProduct: (req, res) => {
-    let pd =
-      "UPDATE product_product" +
-      "   SET is_active =" +
-      "       (CASE " +
-      "             WHEN is_active = 0 THEN 1" +
-      "             ELSE 0" +
-      "       END)" +
-      " WHERE id = ?;";
+    let category_id = req.body.category_id;
+    let sku = req.body.sku;
+    let collection_id = req.body.collection_id;
+    let product_name = req.body.product_name;
+    let material = req.body.material;
+    let weight = req.body.weight;
+    let description = req.body.description;
+    let price = req.body.price;
+    let width = req.body.width;
+    let depth = req.body.depth;
+    let height = req.body.height;
+    let color = req.body.color;
+    let media_0 = req.body.media_0;
+    let media_1 = req.body.media_1;
+    let media_2 = req.body.media_2;
+    let media_3 = req.body.media_3;
+    let media_4 = req.body.media_4;
+    let media_5 = req.body.media_5;
+    let media_6 = req.body.media_6;
+    let media_7 = req.body.media_7;
+    let media_8 = req.body.media_8;
+    let media_9 = req.body.media_9;
+    let media_10 = req.body.media_10;
+    let media_11 = req.body.media_11;
+    let media_12 = req.body.media_12;
+    let media_13 = req.body.media_13;
+    let media_14 = req.body.media_14;
+    var result = [
+      media_0, media_1, media_2, media_3, media_4, 
+      media_5, media_6, media_7, media_8, media_9, 
+      media_10, media_11, media_12, media_13
+    ];
 
-    let pdm =
-      "UPDATE product_product_media" +
-      "   SET is_active =" +
-      "       (CASE " +
-      "             WHEN is_active = 0 THEN 1" +
-      "             ELSE 0" +
-      "       END)" +
-      " WHERE id = ?;";
-    pool.query(pd, [req.body.id], (err, response) => {
+    var count = 0;
+    for (var i in 14) {
+      // if (media_${i} != "") {
+      //   console.log('hihi');
+      // }
+    }
+    let lengthOfProduct = 
+      "SELECT id" +
+      "  FROM product_product_media;";
+
+    let insertProductProductMedia =
+      "INSERT INTO product_product_media (id, sku, category_id, collection_id " +
+      "       , name, material, weight, description, price, discount_price " +
+      "       , width, depth,	height,	color, media_0, media_1, media_2, media_3, media_4, media_5" +		
+      "       , media_6, media_7, media_8, media_9, media_10, media_11, media_12, media_13, media_14" +			
+      "       ) " +			
+      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ); ";
+
+    let insertProductProduct =
+      "INSERT INTO product_product_media (id, sku, category_id, collection_id " +
+      "       , name, material, weight, description, price, discount_price " +
+      "       , width, depth,	height,	color" +		
+      "       ) " +			
+      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); ";
+    
+    let insertProductMedia =
+      "INSERT INTO product_product_media (id, sku, category_id, collection_id " +
+      "       , name, material, weight, description, price, discount_price " +
+      "       , width, depth,	height,	color" +		
+      "       ) " +			
+      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); ";
+    pool.query(lengthOfProduct, (err, response) => {
       if (err) throw err;
-      pool.query(pdm, [req.body.id], (err1, response1) => {
+      pool.query(insertProductProductMedia, [
+          response[0].id + 1, "PP" + String(Number(response[0].id) + 1), category_id
+        , sku, collection_id, product_name, material, weight, description
+        , price, price, width, depth, height, color, media_0
+        , media_1, media_2, media_3, media_4, media_5, media_6, media_7
+        , media_8, media_9, media_10, media_11, media_12, media_13, media_14
+      ], (err1, response1) => {
         if (err1) throw err1;
-        res.json({ message: "Update success!" });
+        res.json({ message: "Add success!" });
       });
     });
   },
@@ -202,23 +255,97 @@ module.exports = {
     let collection = req.body.collection;
     let color = req.body.color;
     let width = req.body.width;
-    let length = req.body.length;
+    let depth = req.body.depth;
     let height = req.body.height;
+    let weight = req.body.weight;
     let description = req.body.description;
-    let pd =
+    let update_name =
       "UPDATE product_product" +
-      "   SET is_active =" +
+      "   SET name =" +
       "       (CASE " +
-      "             WHEN is_active = 0 THEN 1" +
-      "             ELSE 0" +
+      "             WHEN ? != '' THEN ?" +
       "       END)" +
       " WHERE id = ?;";
 
-    pool.query(pd, [req.body.id], (err, response) => {
+    let update_collection =
+      "UPDATE product_product" +
+      "   SET collection =" +
+      "       (CASE " +
+      "             WHEN ? != '' THEN ?" +
+      "       END)" +
+      " WHERE id = ?;";
+
+    let update_color =
+      "UPDATE product_product" +
+      "   SET color =" +
+      "       (CASE " +
+      "             WHEN ? != '' THEN ?" +
+      "       END)" +
+      " WHERE id = ?;";
+
+    let update_width =
+      "UPDATE product_product" +
+      "   SET width =" +
+      "       (CASE " +
+      "             WHEN ? != '' THEN ?" +
+      "       END)" +
+      " WHERE id = ?;";
+
+    let update_depth =
+      "UPDATE product_product" +
+      "   SET depth =" +
+      "       (CASE " +
+      "             WHEN ? != '' THEN ?" +
+      "       END)" +
+      " WHERE id = ?;";
+
+    let update_height =
+      "UPDATE product_product" +
+      "   SET height =" +
+      "       (CASE " +
+      "             WHEN ? != '' THEN ?" +
+      "       END)" +
+      " WHERE id = ?;";
+
+      let update_weight =
+      "UPDATE product_product" +
+      "   SET weight =" +
+      "       (CASE " +
+      "             WHEN ? != '' THEN ?" +
+      "       END)" +
+      " WHERE id = ?;";
+
+    let update_description =
+      "UPDATE product_product" +
+      "   SET description =" +
+      "       (CASE " +
+      "             WHEN ? != '' THEN ?" +
+      "       END)" +
+      " WHERE id = ?;";
+      
+    pool.query(update_name, [name, name , id], (err, response) => {
       if (err) throw err;
-      pool.query(pdm, [req.body.id], (err1, response1) => {
+      pool.query(update_collection, [collection, collection, id], (err1, response1) => {
         if (err1) throw err1;
-        res.json({ message: "Update success!" });
+        pool.query(update_color, [color, color, id], (err2, response2) => {
+          if (err2) throw err2;
+          pool.query(update_width, [width, width, id], (err3, response3) => {
+            if (err3) throw err3;
+            pool.query(update_depth, [depth, depth, id], (err4, response4) => {
+              if (err4) throw err4;
+              pool.query(update_height, [height, height, id], (err5, response5) => {
+                if (err5) throw err5;
+                pool.query(update_weight, [weight, weight, id], (err6, response6) => {
+                  if (err6) throw err6;
+                  pool.query(update_description, [description, description, id], (err7, response7) => {
+                    if (err7) throw err7;
+                    res.json({ message: "Update success!" });
+                  });
+                });
+              });
+            });
+          });
+        });
       });
     });
   },
@@ -280,6 +407,7 @@ module.exports = {
       "       LEFT JOIN product_product " +
       "         ON product_product.collection_id = clt.id" +
       "      WHERE product_id = sale_order_line.product_id" +
+      "      LIMIT 1" +
       "     ) AS collection_name" +
       "     , product_amount" +
       "     , total_price" +
