@@ -22,26 +22,18 @@ module.exports = {
       "   SET last_active = NOW()" +
       " WHERE id = ?;";
 
-    let getUserInfo = 
-      "SELECT id, is_admin, display_name " +
-      "  FROM res_partner " +
-      " WHERE id = ?;";
-
     pool.query(login, [email, password], (err, response) => {
       if (err) throw err;
       if (response.length != 0) {
         pool.query(checkUserStatus, [response[0].id], (err1, response1) => {
           if (err1) throw err1;
           if (response1[0].is_active == 0)  {
-            res.json({ message: "Your account have been blocked, try again!" });  
+            res.json({ message: "Your account have been blocked" });  
           }
           else {
             pool.query(lastActive, [response[0].id], (err2, response2) => {
               if (err2) throw err2;
-              pool.query(getUserInfo, [response[0].id], (err3, response3) => {
-                if (err3) throw err3;
-                res.json(response3);  
-              });
+              res.json({ message: "Signin successful" });  
             });
           }
         });
