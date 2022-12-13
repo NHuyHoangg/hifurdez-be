@@ -37,8 +37,8 @@ module.exports = {
       "        WHERE product_index = 2 " +
       "            ) AS media_2" +
       "    ON product_product.id = media_2.product_id" +
-      " WHERE product_product.is_active = 1";
-
+      " WHERE product_product.is_active = 1" +
+      " ORDER BY product_product.id DESC;";
     pool.query(sql, (err, response) => {
       if (err) throw err;
 
