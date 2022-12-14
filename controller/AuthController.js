@@ -29,7 +29,7 @@ module.exports = {
 
     pool.query(login, [email, password], (err, response) => {
       if (err) throw err;
-      if (response.length != 0) {
+      if (response[0].length != 0) {
         pool.query(checkUserStatus, [response[0].id], (err1, response1) => {
           if (err1) throw err1;
           if (response1[0].is_active == 0)  {
