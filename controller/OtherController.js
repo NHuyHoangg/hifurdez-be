@@ -46,14 +46,45 @@ module.exports = {
     });
   },
 
-//   cart: (req, res) => {
-//     let sql ="";
-//     pool.query(sql, (err, response) => {
-//       if (err) throw err;
-//       res.json(response);
-//     });
-//   }, 
+  insertCart: (req, res) => {
+    let customer_id = req.body.customer_id;
+    let product_id = req.body.product_id;
+    let checkExistCart = 
+      " SELECT * " +
+      "   FROM cart_product " +
+      "  WHERE cart_id = ? " +
+      "    AND product_id = ?; ";
 
+    let insertCart = 
+      " INSERT INTO cart_product(cart_id, product_id)" +
+      " VALUES (?, ?);";
+    pool.query(checkExistCart, [customer_id, product_id], (err, response) => {
+      if (err) throw err;
+      if (response.length != 0) {
+        res.json({ message: "The product have already existed in cart"});
+      }
+      else {
+        pool.query(insertCart, [customer_id, product_id], (err1, response1) => {
+        if (err1) throw err1;
+        res.json( {message: "Insert Successfully"});
+      });}
+      
+    });
+  }, 
+
+  updateCart: (req, res) => {
+    let customer_id = req.body.customer_id;
+    let product_id = req.body.product_id;
+
+    let updateCart = 
+      " DELETE FROM cart_product" +
+      "  WHERE cart_id = ?" +
+      "    AND product_id = ?;";
+    pool.query(updateCart, [customer_id, product_id], (err, response) => {
+      if (err) throw err;
+        res.json({ message: "Delete Successfully"});      
+    });
+  }, 
 //   checkout: (req, res) => {
 //     let sql ="";
 //     pool.query(sql, (err, response) => {

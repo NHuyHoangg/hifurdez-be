@@ -3,6 +3,7 @@ const { pool } = require("../database/dbinfo");
 
 module.exports = {
   signIn: (req, res) => {
+    let result = {};
     let email = req.body.email;
     let password = req.body.password;
     let login =
@@ -27,9 +28,32 @@ module.exports = {
       "  FROM res_partner " +
       " WHERE id = ?;";
 
+    let productInfo =
+      "SELECT ppm.id AS product_id" +
+      "     , ppm.collection_id AS collection_id" +
+      "     , ppm.product_name AS product_name" +
+      "     , CASE" +
+      "            WHEN ppm.discount_price IS NOT NULL THEN ppm.discount_price" +
+      "            ELSE ppm.price" +
+      "       END AS product_price" +
+      "     , media_0 AS product_image" +
+      "  FROM cart_product AS cp" +
+      "  LEFT JOIN product_product_media AS ppm" +
+      "    ON cp.product_id = ppm.id" +
+      " WHERE cp.cart_id = ?;";
+
+    let totalPrice =
+      "SELECT SUM(CASE" +
+      "            WHEN ppm.discount_price IS NOT NULL THEN ppm.discount_price" +
+      "            ELSE ppm.price" +
+      "       END) AS product_price" +
+      "  FROM cart_product AS cp" +
+      "  LEFT JOIN product_product_media AS ppm" +
+      "    ON cp.product_id = ppm.id" +
+      " WHERE cp.cart_id = ?;";
     pool.query(login, [email, password], (err, response) => {
       if (err) throw err;
-      if (response[0].length != 0) {
+      if (response.length != 0) {
         pool.query(checkUserStatus, [response[0].id], (err1, response1) => {
           if (err1) throw err1;
           if (response1[0].is_active == 0)  {
@@ -40,7 +64,16 @@ module.exports = {
               if (err2) throw err2;
               pool.query(getUserInfo, [response[0].id], (err3, response3) => {
                 if (err3) throw err3;
-                res.json(response3);  
+                result["user-info"] = response3;
+                pool.query(productInfo, [response[0].id], (err4, response4) => {
+                  if (err4) throw err4;
+                  result["product-info"] = response4;
+                  pool.query(totalPrice, [response[0].id], (err5, response5) => {
+                    if (err5) throw err5;
+                    result["total-price"] = response5;
+                    res.json(result);  
+                  });
+                });
               });
             });
           }
@@ -70,6 +103,10 @@ module.exports = {
       " INSERT INTO res_partner(id, name, user_mail, display_name, password)" +
       " VALUES (?, ?, ?, ?, SHA1(?));";
 
+    let createCart = 
+      " INSERT INTO res_cart(id, customer_id)" +
+      " VALUES (?, ?);";
+
     pool.query(checkExist, [email], (err, response) => {
       if (err) throw err;
       if (response.length != 0) {
@@ -80,7 +117,10 @@ module.exports = {
           if (err1) throw err1;
           pool.query(addUser, [response1[0].id + 1, fullname, email, username, password], (err2, response2) => {
             if (err2) throw err2;
-            res.json({ message: "Signup successful" });  
+            pool.query(createCart, [response1[0].id + 1, response1[0].id + 1], (err3, response3) => {
+              if (err3) throw err3;
+              res.json({ message: "Signup successful" });  
+            });
           });
         });
       }
@@ -88,3 +128,6 @@ module.exports = {
   },
   
 };
+
+
+    

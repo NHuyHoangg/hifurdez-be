@@ -162,9 +162,15 @@ app.route("/user/order/detail").post(userCtrl.userSaleDetail);
 // POST - search in navbar with params {stringName}
 app.route("/search").post(otherCtrl.navBarSearch);
 
+// POST - insert cart with params {customer_id, product_id}
+app.route("/cart/insert").post(otherCtrl.insertCart);
+
+// POST - insert cart with params {customer_id, product_id}
+app.route("/cart/update").post(otherCtrl.updateCart);
 //////////////////////////////////////////////////////////////////////
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log("Server started running on " + port);
 
+  
 });
