@@ -167,6 +167,9 @@ app.route("/cart/insert").post(otherCtrl.insertCart);
 
 // POST - insert cart with params {customer_id, product_id}
 app.route("/cart/update").post(otherCtrl.updateCart);
+
+// POST - get cart with params {customer_id}
+app.route("/cart/get").post(otherCtrl.getCart);
 //////////////////////////////////////////////////////////////////////
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

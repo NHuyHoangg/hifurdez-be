@@ -85,6 +85,44 @@ module.exports = {
         res.json({ message: "Delete Successfully"});      
     });
   }, 
+
+  getCart: (req, res) => {
+    let user_id = req.body.customer_id;
+    let result = {};
+    let productInfo =
+      "SELECT ppm.id AS product_id" +
+      "     , ppm.collection_id AS collection_id" +
+      "     , ppm.product_name AS product_name" +
+      "     , CASE" +
+      "            WHEN ppm.discount_price IS NOT NULL THEN ppm.discount_price" +
+      "            ELSE ppm.price" +
+      "       END AS product_price" +
+      "     , media_0 AS product_image" +
+      "  FROM cart_product AS cp" +
+      "  LEFT JOIN product_product_media AS ppm" +
+      "    ON cp.product_id = ppm.id" +
+      " WHERE cp.cart_id = ?;";
+
+    let totalPrice =
+      "SELECT SUM(CASE" +
+      "            WHEN ppm.discount_price IS NOT NULL THEN ppm.discount_price" +
+      "            ELSE ppm.price" +
+      "       END) AS product_price" +
+      "  FROM cart_product AS cp" +
+      "  LEFT JOIN product_product_media AS ppm" +
+      "    ON cp.product_id = ppm.id" +
+      " WHERE cp.cart_id = ?;";
+      pool.query(productInfo, [user_id], (err, response) => {
+        if (err) throw err;
+        result["product-info"] = response;
+        pool.query(totalPrice, [user_id], (err1, response1) => {
+          if (err1) throw err1;
+          result["total-price"] = response1;
+          res.json(result);  
+        });
+      });
+  },
+  
 //   checkout: (req, res) => {
 //     let sql ="";
 //     pool.query(sql, (err, response) => {
