@@ -16,11 +16,11 @@ module.exports = {
       "     , rp.name AS province" +
       "  FROM res_partner AS user" +
       "  LEFT JOIN res_ward AS rw" +
-      "    ON customer.ward_id = rw.id" +
+      "    ON user.ward_id = rw.id" +
       "  LEFT JOIN res_district AS rd" +
-      "    ON customer.district_id = rd.id" +
+      "    ON user.district_id = rd.id" +
       "  LEFT JOIN res_province AS rp" +
-      "    ON customer.province_id = rp.id" +
+      "    ON user.province_id = rp.id" +
       " WHERE user.id = ?;";
 
     pool.query(info, [id], (err, response) => {
