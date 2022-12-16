@@ -103,11 +103,17 @@ app.route("/admin/products/add-new").put(adminCtrl.addNewProduct);
 // GET - admin sale order
 app.route("/admin/order/sale").get(adminCtrl.sale);
 
+// PUT - admin sale order update status with params {so_id}
+app.route("/admin/order/sale/status").put(adminCtrl.updateSaleStatus);
+
 // POST - admin sale order with params {so_id}
 app.route("/admin/order/sale/detail").post(adminCtrl.saleDetail);
 
 // GET - admin purchase order
 app.route("/admin/order/purchase").get(adminCtrl.purchase);
+
+// PUT - admin purchase order update status with params {so_id}
+app.route("/admin/order/purchase/status").put(adminCtrl.updatePurchaseStatus);
 
 // POST - admin purchase order with params {po_id}
 app.route("/admin/order/purchase/detail").post(adminCtrl.purchaseDetail);

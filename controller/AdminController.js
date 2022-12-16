@@ -427,6 +427,23 @@ module.exports = {
     });
   },
 
+  updateSaleStatus: (req, res) => {
+    let id = req.body.id;
+    let sql =
+      "UPDATE sale_order" +
+      "   SET status = " +
+      "       CASE " +
+      "            WHEN UPPER(status) = 'DELIVERY' THEN 'done' " +
+      "            ELSE 'delivery' " +
+      "        END "+
+      " WHERE id = ?;";
+
+    pool.query(sql, [id], (err, response) => {
+      if (err) throw err;
+      res.json({message: "Update successfully"});
+    });
+  },
+
   saleDetail: (req, res) => {
     let result = {};
     let id = req.body.id;
@@ -510,6 +527,23 @@ module.exports = {
     pool.query(sql, (err, response) => {
       if (err) throw err;
       res.json(response);
+    });
+  },
+
+  updatePurchaseStatus: (req, res) => {
+    let id = req.body.id;
+    let sql =
+      "UPDATE purchaser_order" +
+      "   SET status = " +
+      "       CASE  " +
+      "            WHEN UPPER(status) = 'DELIVERY' THEN 'done' " +
+      "            ELSE 'delivery' " +
+      "        END "+
+      " WHERE id = ?;";
+
+    pool.query(sql, [id], (err, response) => {
+      if (err) throw err;
+      res.json({message: "Update successfully"});
     });
   },
 
