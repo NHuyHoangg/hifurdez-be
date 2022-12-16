@@ -129,6 +129,7 @@ module.exports = {
       "SELECT user.id " +
       "     , user.name " +
       "     , user.phone" +
+      "     , user.user_mail" +
       "     , user.street" +
       "     , rw.name AS ward" +
       "     , rw.id AS ward_id" +
@@ -151,21 +152,115 @@ module.exports = {
     });
   },
 
-  // payup: (req, res) => {
-  //   let user_id = req.body.user_id;
-  //   let user_id = req.body.user_name;
-  //   let user_id = req.body.user_phone;
-  //   let user_id = req.body.user_address;
-  //   let user_id = req.body.user_province;
-  //   let user_id = req.body.user_district;
-  //   let user_id = req.body.user_ward;
-  //   let user_id = req.body.payment_method;
-  //   let result = {};
-  //   let sql ="";
-  //   pool.query(sql, (err, response) => {
-  //     if (err) throw err;
-  //     res.json(response);
-  //   });
-  // },
-};
+  payup: (req, res) => {
+    let user_id = req.body.user_id;
+    let user_address = req.body.user_address;
+    let user_province = req.body.user_province;
+    let user_district = req.body.user_district;
+    let user_ward = req.body.user_ward;
+    let payment_method = req.body.payment_method;
+    let total_amount = req.body.total_amount;
+    let product_0 = req.body.product_0;
+    let product_1 = req.body.product_1;
+    let product_2 = req.body.product_2;
+    let product_3 = req.body.product_3;
+    let product_4 = req.body.product_4;
+    let product_5 = req.body.product_5;
+    let product_6 = req.body.product_6;
+    let product_7 = req.body.product_7;
+    let product_8 = req.body.product_8;
+    let product_9 = req.body.product_9;
+    let result = [
+      product_0,
+      product_1,
+      product_2,
+      product_3,
+      product_4,
+      product_5,
+      product_6,
+      product_7,
+      product_8,
+      product_9
+    ];
+    
+    let resultImport = [];
+    let product_amount = 0;
+    for (let i = 0; i < result.length; i++) {
+      if (result[i] != "test") {
+        resultImport.push(result[i]);
+        product_amount += 1;
+      }
+    }
 
+    let delete_cart = 
+      "DELETE FROM res_cart " +
+      " WHERE customer_id = ?;";
+    
+    let get_so_id = 
+      "SELECT id " +
+      "  FROM sale_order " +
+      " ORDER BY id DESC" +
+      " LIMIT 1;";
+
+    let create_so = 
+      "INSERT INTO sale_order (id, name, status, order_date, product_amount, amount_total, commitment_date, customer_id, payment_method) " +
+      "VALUES (?, ?, ?, NOW(), ?, ?, DATE_ADD(NOW(), INTERVAL 7 DAY), ?, ?);";
+
+    let create_tc = 
+      "INSERT INTO transport_card (id, code, status, delivery_date, submit_cod, sale_order_id, third_party_employee_id, third_party_id, warehouse_id, street, ward_id, district_id, province_id) " +
+      "VALUES (?, ?, 'delivery', DATE_ADD(NOW(), INTERVAL 6 DAY), ?, ?, ?, ?, ? ,? ,? ,? ,?);";
+
+    let get_sol_id = 
+      "SELECT id " +
+      "  FROM sale_order_line " +
+      " ORDER BY id DESC" +
+      " LIMIT 1;";
+    
+    let create_sol = 
+      "INSERT INTO sale_order_line (id, product_amount, product_id, so_id) " +
+      "VALUES (?, 1, ?, ?);";
+
+    pool.query(delete_cart, [user_id], (err, response) => {
+      if (err) throw err;
+      pool.query(get_so_id, (err1, response1) => {
+        if (err1) throw err1;
+        pool.query(create_so, [
+          Number(response1[0].id) + 1, 
+          "SO6000" + String(Number(response1[0].id) + 1),
+          "delivery",
+          product_amount,
+          total_amount,
+          user_id, 
+          payment_method,
+        ], (err2, response2) => {
+          if (err2) throw err2;
+          pool.query(create_tc, [
+            Number(response1[0].id) + 1, 
+            "TC0000" + String(Number(response1[0].id) + 1),
+            total_amount,
+            Number(response1[0].id) + 1, 
+            34,
+            8,
+            2,
+            user_address,
+            user_ward,
+            user_district,
+            user_province,
+          ], (err3, response3) => {
+            if (err3) throw err3;
+            pool.query(get_sol_id, (err4, response4) => {
+              if (err4) throw err4;
+              for (let i = 0; i < resultImport.length; i++) {
+                console.log(resultImport[i]);
+                pool.query(create_sol, [Number(response4[0].id) + 1 + Number(i), resultImport[i], Number(response1[0].id) + 1], (err5, response5) => {
+                  if (err5) throw err5;
+                });
+              } 
+              res.json({ message: "Add success!" });
+            });
+          });
+        });
+      });
+    });
+  },
+};
