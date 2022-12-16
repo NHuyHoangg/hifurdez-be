@@ -12,7 +12,8 @@ module.exports = {
       "     , display_name" +
       "     , is_active" +
       "  FROM res_partner" +
-      " WHERE is_supplier =  0;";
+      " WHERE is_supplier =  0" +
+      " ORDER BY create_date DESC;";
 
     pool.query(sql, (err, response) => {
       if (err) throw err;
@@ -40,7 +41,8 @@ module.exports = {
       "    ON rp.district_id = rd.id" +
       "  LEFT JOIN res_province AS rpp" +
       "    ON rp.province_id = rpp.id" +
-      " WHERE rp.id = ?;";
+      " WHERE rp.id = ?"+
+      " ORDER BY rp.create_date DESC;";
 
     let sale_order =
       "SELECT name" +
@@ -53,7 +55,8 @@ module.exports = {
       "  FROM sale_order AS sale" +
       "  LEFT JOIN transport_card AS tc" +
       "    ON sale.id = tc.sale_order_id" +
-      " WHERE customer_id = ?;";
+      " WHERE customer_id = ?" +
+      " ORDER BY sale.create_date DESC;";
 
     let total_price =
       "SELECT SUM(amount_total) AS amount_total" +
@@ -106,7 +109,8 @@ module.exports = {
       "  LEFT JOIN product_category AS cate" +
       "    ON pdt.category_id = cate.id" +
       "  LEFT JOIN product_collection AS clt" +
-      "    ON pdt.collection_id = clt.id;";
+      "    ON pdt.collection_id = clt.id" +
+      " ORDER BY pdt.create_date DESC;";
     pool.query(sql, (err, response) => {
       if (err) throw err;
       res.json(response);
@@ -419,8 +423,8 @@ module.exports = {
       "     , is_active" +
       "  FROM sale_order AS sale" +
       "  LEFT JOIN res_partner AS rp" +
-      "    ON sale.customer_id = rp.id;";
-
+      "    ON sale.customer_id = rp.id"+
+      " ORDER BY sale.create_date DESC;";
     pool.query(sql, (err, response) => {
       if (err) throw err;
       res.json(response);
@@ -522,8 +526,8 @@ module.exports = {
       "     , is_active" +
       "  FROM purchaser_order AS purchase" +
       "  LEFT JOIN res_partner AS rp" +
-      "    ON purchase.supplier_id = rp.id;";
-
+      "    ON purchase.supplier_id = rp.id" +
+      " ORDER BY purchase.create_date DESC;";
     pool.query(sql, (err, response) => {
       if (err) throw err;
       res.json(response);
@@ -608,8 +612,8 @@ module.exports = {
       "     , DATE_FORMAT(start_date, '%Y/%m/%d') AS start_date" +
       "     , DATE_FORMAT(end_date, '%Y/%m/%d') AS end_date" +
       "     , is_active" +
-      "  FROM third_party_company;";
-
+      "  FROM third_party_company" +
+      " ORDER BY create_date DESC;";
     pool.query(sql, (err, response) => {
       if (err) throw err;
       res.json(response);
@@ -697,8 +701,8 @@ module.exports = {
       "     , company.name AS company_name" +
       "  FROM third_party_employee AS employee" +
       "  LEFT JOIN third_party_company AS company" +
-      "    ON company.id = employee.third_party_id;";
-
+      "    ON company.id = employee.third_party_id"+
+      " ORDER BY employee.create_date DESC;";
     pool.query(sql, (err, response) => {
       if (err) throw err;
       res.json(response);
@@ -775,8 +779,8 @@ module.exports = {
       "  LEFT JOIN res_district AS rd" +
       "    ON sw.district_id = rd.id" +
       "  LEFT JOIN res_province AS rp" +
-      "    ON sw.province_id = rp.id;";
-
+      "    ON sw.province_id = rp.id" +
+      " ORDER BY sw.create_date DESC;";
     pool.query(sql, (err, response) => {
       if (err) throw err;
       res.json(response);
