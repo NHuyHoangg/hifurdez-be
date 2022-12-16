@@ -203,8 +203,8 @@ module.exports = {
       " LIMIT 1;";
 
     let create_so = 
-      "INSERT INTO sale_order (id, name, status, order_date, product_amount, amount_total, commitment_date, customer_id, payment_method) " +
-      "VALUES (?, ?, ?, NOW(), ?, ?, DATE_ADD(NOW(), INTERVAL 7 DAY), ?, ?);";
+      "INSERT INTO sale_order (id, name, status, order_date, product_amount, amount_untaxed, amount_tax, amount_total, commitment_date, customer_id, payment_method) " +
+      "VALUES (?, ?, ?, NOW(), ?, ?, ?, ?, DATE_ADD(NOW(), INTERVAL 7 DAY), ?, ?);";
 
     let create_tc = 
       "INSERT INTO transport_card (id, code, status, delivery_date, submit_cod, sale_order_id, third_party_employee_id, third_party_id, warehouse_id, street, ward_id, district_id, province_id) " +
@@ -220,6 +220,18 @@ module.exports = {
       "INSERT INTO sale_order_line (id, product_amount, product_id, so_id) " +
       "VALUES (?, 1, ?, ?);";
 
+    let get_sol_price = 
+      "SELECT price " +
+      "  FROM product_product " +
+      " WHERE id = ?;";
+
+    let update_sol = 
+      "UPDATE sale_order_line total_price " +
+      "   SET total_price = ? " +
+      "     , price_unit = ? " +
+      " WHERE id = ?;";
+
+    let total_price = 0;
     pool.query(delete_cart, [user_id], (err, response) => {
       if (err) throw err;
       pool.query(get_so_id, (err1, response1) => {
@@ -229,6 +241,8 @@ module.exports = {
           "SO6000" + String(Number(response1[0].id) + 1),
           "delivery",
           product_amount,
+          total_amount * 0.9,
+          total_amount * 0.1,
           total_amount,
           user_id, 
           payment_method,
@@ -251,9 +265,15 @@ module.exports = {
             pool.query(get_sol_id, (err4, response4) => {
               if (err4) throw err4;
               for (let i = 0; i < resultImport.length; i++) {
-                console.log(resultImport[i]);
                 pool.query(create_sol, [Number(response4[0].id) + 1 + Number(i), resultImport[i], Number(response1[0].id) + 1], (err5, response5) => {
                   if (err5) throw err5;
+                  pool.query(get_sol_price, [resultImport[i]], (err6, response6) => {
+                    if (err6) throw err6;
+                    console.log(response6[0].price)
+                    pool.query(update_sol, [Number(response6[0].price), Number(response6[0].price), Number(response4[0].id) + 1 + Number(i)], (err7, response7) => {
+                      if (err7) throw err7;
+                    });
+                  });
                 });
               } 
               res.json({ message: "Add success!" });
