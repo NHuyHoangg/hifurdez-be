@@ -37,7 +37,8 @@ module.exports = {
       "        WHERE product_index = 2 " +
       "            ) AS media_2" +
       "    ON product_product.id = media_2.product_id" +
-      " WHERE product_product.is_active = 1";
+      " WHERE product_product.is_active = 1" +
+      " ORDER BY product_product.id DESC;";
 
     pool.query(sql, (err, response) => {
       if (err) throw err;
@@ -48,16 +49,13 @@ module.exports = {
 
   detail: (req, res) => {
     let data = req.body.id;
-    let sql = 
-      "SELECT *" +
-      "  FROM product_product_media" +
-      " WHERE id = ?";
+    let sql = "SELECT *" + "  FROM product_product_media" + " WHERE id = ?";
     pool.query(sql, [data], (err, response) => {
       if (err) throw err;
       res.json(response);
     });
   },
-  
+
   random: (req, res) => {
     let sql =
       "SELECT id" +
