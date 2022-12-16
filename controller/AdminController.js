@@ -420,7 +420,7 @@ module.exports = {
       "     , DATE_FORMAT(commitment_date, '%Y/%m/%d') AS delivery_date" +
       "     , product_amount" +
       "     , amount_total" +
-      "     , is_active" +
+      "     , sale.status AS status" +
       "  FROM sale_order AS sale" +
       "  LEFT JOIN res_partner AS rp" +
       "    ON sale.customer_id = rp.id"+
@@ -523,7 +523,7 @@ module.exports = {
       "     , DATE_FORMAT(delivery_date, '%Y/%m/%d') AS delivery_date" +
       "     , product_amount" +
       "     , amount_total" +
-      "     , is_active" +
+      "     , purchase.status AS status" +
       "  FROM purchaser_order AS purchase" +
       "  LEFT JOIN res_partner AS rp" +
       "    ON purchase.supplier_id = rp.id" +
