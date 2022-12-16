@@ -123,11 +123,49 @@ module.exports = {
       });
   },
   
-//   checkout: (req, res) => {
-//     let sql ="";
-//     pool.query(sql, (err, response) => {
-//       if (err) throw err;
-//       res.json(response);
-//     });
-//   },
+  checkout: (req, res) => {
+    let user_id = req.body.user_id;
+    let info =
+      "SELECT user.id " +
+      "     , user.name " +
+      "     , user.phone" +
+      "     , user.street" +
+      "     , rw.name AS ward" +
+      "     , rw.id AS ward_id" +
+      "     , rd.name AS district" +
+      "     , rd.id AS district_id" +
+      "     , rp.name AS province" +
+      "     , rp.id AS province_id" +
+      "  FROM res_partner AS user" +
+      "  LEFT JOIN res_ward AS rw" +
+      "    ON user.ward_id = rw.id" +
+      "  LEFT JOIN res_district AS rd" +
+      "    ON user.district_id = rd.id" +
+      "  LEFT JOIN res_province AS rp" +
+      "    ON user.province_id = rp.id" +
+      " WHERE user.id = ?;";
+
+    pool.query(info, [user_id], (err, response) => {
+      if (err) throw err;
+      res.json(response);
+    });
+  },
+
+  // payup: (req, res) => {
+  //   let user_id = req.body.user_id;
+  //   let user_id = req.body.user_name;
+  //   let user_id = req.body.user_phone;
+  //   let user_id = req.body.user_address;
+  //   let user_id = req.body.user_province;
+  //   let user_id = req.body.user_district;
+  //   let user_id = req.body.user_ward;
+  //   let user_id = req.body.payment_method;
+  //   let result = {};
+  //   let sql ="";
+  //   pool.query(sql, (err, response) => {
+  //     if (err) throw err;
+  //     res.json(response);
+  //   });
+  // },
 };
+
