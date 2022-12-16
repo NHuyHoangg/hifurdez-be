@@ -179,6 +179,9 @@ app.route("/cart/get").post(otherCtrl.getCart);
 
 // POST - get checkout with params {customer_id}
 app.route("/cart/checkout").post(otherCtrl.checkout);
+
+// POST - get payup with params {customer_id}
+app.route("/cart/payup").post(otherCtrl.payup);
 //////////////////////////////////////////////////////////////////////
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
