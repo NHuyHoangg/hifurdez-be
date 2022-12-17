@@ -140,18 +140,18 @@ module.exports = {
       "     , product_amount" +
       "     , rp.name AS customer_name" +
       "     , rp.phone AS customer_phone" +
-      "     , rp.street AS street" +
+      "     , tc.street AS street" +
       "     , (SELECT name" +
       "          FROM res_ward" +
-      "         WHERE res_ward.id = rp.ward_id" +
+      "         WHERE res_ward.id = tc.ward_id" +
       "         LIMIT 1) AS ward" +
       "     , (SELECT name" +
       "          FROM res_district" +
-      "         WHERE res_district.id = rp.district_id" +
+      "         WHERE res_district.id = tc.district_id" +
       "         LIMIT 1) AS district" +
       "     , (SELECT name" +
       "          FROM res_province" +
-      "         WHERE res_province.id = rp.province_id" +
+      "         WHERE res_province.id = tc.province_id" +
       "         LIMIT 1) AS province" +
       "  FROM sale_order AS sale" +
       "  LEFT JOIN res_partner AS rp" +
