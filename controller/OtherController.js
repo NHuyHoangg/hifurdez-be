@@ -97,7 +97,7 @@ module.exports = {
       "            WHEN ppm.discount_price IS NOT NULL THEN ppm.discount_price" +
       "            ELSE ppm.price" +
       "       END AS product_price" +
-      "     , media_0 AS product_image" +
+      "     , REPLACE(media_0, 'F0EAE2', 'eae3d9') AS product_image" +
       "  FROM cart_product AS cp" +
       "  LEFT JOIN product_product_media AS ppm" +
       "    ON cp.product_id = ppm.id" +
