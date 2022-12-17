@@ -193,8 +193,8 @@ module.exports = {
     }
 
     let delete_cart = 
-      "DELETE FROM res_cart " +
-      " WHERE customer_id = ?;";
+      "DELETE FROM cart_product " +
+      " WHERE cart_id = ?;";
     
     let get_so_id = 
       "SELECT id " +
