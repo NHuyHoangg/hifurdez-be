@@ -143,13 +143,16 @@ module.exports = {
       "     , rp.street AS street" +
       "     , (SELECT name" +
       "          FROM res_ward" +
-      "         WHERE res_ward.id = rp.ward_id) AS ward" +
+      "         WHERE res_ward.id = rp.ward_id" +
+      "         LIMIT 1) AS ward" +
       "     , (SELECT name" +
       "          FROM res_district" +
-      "         WHERE res_district.id = rp.district_id) AS district" +
+      "         WHERE res_district.id = rp.district_id" +
+      "         LIMIT 1) AS district" +
       "     , (SELECT name" +
       "          FROM res_province" +
-      "         WHERE res_province.id = rp.province_id) AS province" +
+      "         WHERE res_province.id = rp.province_id" +
+      "         LIMIT 1) AS province" +
       "  FROM sale_order AS sale" +
       "  LEFT JOIN res_partner AS rp" +
       "    ON sale.customer_id = rp.id" +
@@ -163,10 +166,11 @@ module.exports = {
       "     , price_unit AS price" +
       "     ,(" +
       "       SELECT clt.name" +
-      "       FROM product_collection AS clt" +
-      "       LEFT JOIN product_product " +
-      "         ON product_product.collection_id = clt.id" +
-      "      WHERE product_id = sale_order_line.product_id" +
+      "         FROM product_collection AS clt" +
+      "         LEFT JOIN product_product " +
+      "           ON product_product.collection_id = clt.id" +
+      "        WHERE product_id = sale_order_line.product_id" +
+      "        LIMIT 1" +
       "     ) AS collection_name" +
       "     , product_amount" +
       "     , total_price" +
