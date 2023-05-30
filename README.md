@@ -1,6 +1,6 @@
 # Hifurdez Back-end
 
-This is a sample JavaScript project that demonstrates how to build a RESTful API using Node.js and Express.js.
+This is a RESTful API using Node.js and Express.js for a furniture showroom ecommerce website.
 
 ## Installation
 
