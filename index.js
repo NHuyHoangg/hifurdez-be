@@ -7,7 +7,13 @@ const adminCtrl = require("./controller/AdminController");
 const authCtrl = require("./controller/AuthController");
 const userCtrl = require("./controller/UserController");
 const otherCtrl = require("./controller/OtherController");
+const path = require("path");
 
+require("dotenv").config({ path: path.resolve(__dirname, ".env") });
+
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+const swaggerAutogen = require("swagger-autogen")();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -37,7 +43,38 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+
+
+const doc = {
+  info: {
+    title: "Hifurdez's API",
+    description: "API for an ecommerce website",
+  },
+  schemes: ["https"],
+};
+
+const outputFile = "./swagger-output.json";
+const endpointsFiles = ["./index.js"];
+
+
+const swaggerDocument = require('./swagger-output.json');
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument, { explorer: true })
+);
+
 app.options("/", cors(corsOptions));
+
+app.get("/api-update", (req, res) => {
+  swaggerAutogen(outputFile, endpointsFiles, doc).then(() => {
+    require("./index.js");
+  });
+   res.send(
+    "complete"
+   );
+});
+
 app.get("/", (req, res) => {
   res.send(
     "<html> <img src='https://ik.imagekit.io/amnd3xdhd/316166119_526826592671589_9115068966916421847_n.png?ik-sdk-version=javascript-1.4.3&updatedAt=1669486983800' style='height: 100%'></html>"
@@ -134,7 +171,9 @@ app.route("/admin/3plse").get(adminCtrl.thirdPartyEmployee);
 app.route("/admin/3plse/detail").post(adminCtrl.thirdPartyEmployeeDetail);
 
 // PUT - admin change 3pls status with params {3plse_id}
-app.route("/admin/3plse/change-status").put(adminCtrl.thirdPartyEmployeeChangeStatus);
+app
+  .route("/admin/3plse/change-status")
+  .put(adminCtrl.thirdPartyEmployeeChangeStatus);
 
 // GET - admin warehouse
 app.route("/admin/warehouse").get(adminCtrl.warehouse);
@@ -143,13 +182,15 @@ app.route("/admin/warehouse").get(adminCtrl.warehouse);
 app.route("/admin/warehouse/detail").post(adminCtrl.warehouseDetail);
 
 // PUT - admin change warehouse status with params {warehouse_id}
-app.route("/admin/warehouse/change-status").put(adminCtrl.warehouseChangeStatus);
+app
+  .route("/admin/warehouse/change-status")
+  .put(adminCtrl.warehouseChangeStatus);
 
 // -------------------------------- USER -------------------------------------- //
-// POST - user get user's info with params {user_id} 
+// POST - user get user's info with params {user_id}
 app.route("/user/get-info").post(userCtrl.getInfo);
 
-// POST - user confirm user's password with params {user_id, password} 
+// POST - user confirm user's password with params {user_id, password}
 app.route("/user/confirm-password").post(userCtrl.confirmUserPassword);
 
 // PUT - user change info with params {fullname, username, email, password, phone, street, ward_id, district_id, province_id}
@@ -186,6 +227,4 @@ app.route("/cart/payup").post(otherCtrl.payup);
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log("Server started running on " + port);
-
-  
 });
