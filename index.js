@@ -43,8 +43,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-
-
 const doc = {
   info: {
     title: "Hifurdez's API",
@@ -56,12 +54,24 @@ const doc = {
 const outputFile = "./swagger-output.json";
 const endpointsFiles = ["./index.js"];
 
-
-const swaggerDocument = require('./swagger-output.json');
+const swaggerDocument = require("./swagger-output.json");
 app.use(
   "/api-docs",
   swaggerUi.serve,
-  swaggerUi.setup(swaggerDocument, { explorer: true })
+  swaggerUi.setup(swaggerDocument, {
+    explorer: true,
+    customSiteTitle: "Backend Generator",
+    customfavIcon: "https://avatars.githubusercontent.com/u/6936373?s=200&v=4",
+    customJs: [
+      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.min.js",
+    ],
+    customCssUrl: [
+      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css",
+      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.min.css",
+      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.css",
+    ],
+  })
 );
 
 app.options("/", cors(corsOptions));
@@ -70,9 +80,7 @@ app.get("/api-update", (req, res) => {
   swaggerAutogen(outputFile, endpointsFiles, doc).then(() => {
     require("./index.js");
   });
-   res.send(
-    "complete"
-   );
+  res.send("complete");
 });
 
 app.get("/", (req, res) => {
