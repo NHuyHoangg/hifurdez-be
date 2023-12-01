@@ -22,6 +22,7 @@ const corsOptions = {
     "http://localhost:3000",
     "https://www.hifurdez.studio",
     "https://testfehifurdez.vercel.app",
+    "https://hifurdez.hcmut.tech",
   ],
   credentials: true,
   method: ["GET", "PUT", "POST"],
